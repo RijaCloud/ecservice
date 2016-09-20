@@ -1,0 +1,6 @@
+.img-loader {
+    z-index: 1000;
+    position: fixed;
+    right: 35%;
+    top: 30%;
+}
