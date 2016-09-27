@@ -10,6 +10,7 @@
             'link'=>[
 
                 ['name'=>'Acceuil','url'=>route('admin.index')],
+                ['name'=>'Departement','url'=>route('territory.allDepartement')],
                 ['name'=>ucfirst($place->nom)]
             ]
 

@@ -10,12 +10,14 @@
             'link'=>[
 
                 ['name'=>'Acceuil','url'=>route('admin.index')],
+
                 ['name'=>'Region']
             ]
 
         ])
         @include('admin.map-template', [
             'title'=>'Departement',
+            'function'=>'Departement',
             'action'=>action('Back\TerritoryController@createDepartement'),
             'placeholder'=>'Departement',
             'parent'=>$parent,

@@ -10,6 +10,7 @@
             'link'=>[
 
                 ['name'=>'Acceuil','url'=>route('admin.index')],
+
                 ['name'=>'Commune']
             ]
 
@@ -17,6 +18,7 @@
 
         @include('admin.map-template', [
             'title'=>'Commune',
+            'function'=>'Town',
             'action'=>action('Back\TerritoryController@createTown'),
             'placeholder'=>'Commune',
             'parent'=>$parent,

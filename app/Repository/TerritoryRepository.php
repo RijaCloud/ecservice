@@ -172,6 +172,12 @@
                 return $this->region->latest()->get();
         }
 
+        public function allRegionWithNumberOfAffiliateChild() {
+
+            
+
+        }
+
         /**
          * Save a region
          * @param $input

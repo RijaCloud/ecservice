@@ -10,6 +10,7 @@
             'link'=>[
 
                 ['name'=>'Acceuil','url'=>route('admin.index')],
+
                 ['name'=>'Province']
             ]
 
@@ -17,6 +18,7 @@
 
         @include('admin.map-template', [
             'title'=>'Province',
+            'function'=>'Province',
             'action'=>action('Back\TerritoryController@createProvince'),
             'placeholder'=>'Province',
             'parent'=>[]
