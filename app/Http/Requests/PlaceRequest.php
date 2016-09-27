@@ -24,7 +24,7 @@ class PlaceRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required',
+            'name'=>'required|string|not_in:lieu',
             'description'=>'',
             'longitude'=>'required|numeric',
             'latitude'=>'required|numeric'

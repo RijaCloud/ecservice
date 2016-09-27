@@ -21,7 +21,8 @@
             'placeholder'=>ucfirst($place->nom),
             'parent'=>$parent,
             'value'=>$place,
-            'pl'=>$place->departement_id
+            'pl'=>$place->departement_id,
+            'appart'=>'District'
         ])
 
     </div>

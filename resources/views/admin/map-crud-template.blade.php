@@ -129,13 +129,13 @@
                     var longitude = $('#longitude');
                     var latitude = $('#latitude');
                     var parent = $('#parent');
-
+                    var loader = $('.img-loader');
                     var error = $('.input-group span.error');
                     for(var i = 0 ; i < error.length ; i++) {
                         if(!$(error[i]).hasClass('hidden'))
                             $(error[i]).addClass('hidden')
                     }
-
+                    loader.removeClass('hidden')
                     $.ajax({
                         data : $(this).serialize(),
                         method : method,
@@ -145,6 +145,7 @@
                         description.val('')
                         longitude.val('')
                         latitude.val('')
+                        loader.addClass('hidden')
                     }).fail(function(data) {
 
                         var error = data.responseJSON;
@@ -155,6 +156,7 @@
 
                         }
 
+                        loader.addClass('hidden')
                     })
                 })
 

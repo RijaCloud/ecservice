@@ -1,5 +1,9 @@
 @extends('template.admin')
 
+@section('head')
+    <link rel="stylesheet" href="{{ asset('admin/plugins/datatables/jquery.dataTables.min.css') }}">
+@endsection
+
 @section('content')
 
     <div class="content-wrapper">
@@ -33,7 +37,6 @@
                                             <td>No.</td>
                                             <td>Name</td>
                                             <td>Description</td>
-                                            <td>Action</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -96,7 +99,10 @@
                             <div class="row" id="info" style="display:none;">
                                 <div class="col-md-12">
                                     <a class="btn btn-primary" id="edit">Editer</a>
-                                    <a class="btn btn-warning" id="delete">Supprimer</a>
+                                    <form action="" id="delete" method="POST">
+                                        {{ csrf_field() }}
+                                        <button class="btn btn-warning" id="delete">Supprimer</button>
+                                    </form>
 
                                     <div class="form-group">
                                         <label for="map-latitude">Nom</label>
@@ -132,9 +138,11 @@
         app.map.initMap(document.getElementById('canvas'));
 
         var tomap = document.querySelectorAll('.to-map');
+        var load = document.querySelector('.img-loader');
         for(var i = 0 ; i < tomap.length ; i++) {
             tomap[i].addEventListener('click', function(e) {
                 e.preventDefault();
+                load.classList.remove('hidden')
                 app.map.findMapAndReloadMarkers(this.getAttribute('data-link'),this.getAttribute('data-delete'));
             })
         }
@@ -171,7 +179,7 @@
 
     <script>
         $(function () {
-            $('#datable_e').DataTable({
+            $('#datatable_e').DataTable({
                 "paging": true,
                 "lengthChange": false,
                 "searching": false,

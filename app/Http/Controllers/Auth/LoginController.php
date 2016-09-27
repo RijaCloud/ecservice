@@ -143,6 +143,24 @@ class LoginController extends Controller
     }
 
     /**
+     * Redirect the user after determining they are locked out.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendLockoutResponse(Request $request)
+    {
+        $seconds = $this->limiter()->availableIn(
+            $this->throttleKey($request)
+        );
+
+        $message = Lang::get('auth.throttle', ['seconds' => $seconds]);
+
+        return response()->json([$this->username() => $message],422);
+
+    }
+
+    /**
      * Validate the user login request.
      *
      * @param  \Illuminate\Http\Request  $request

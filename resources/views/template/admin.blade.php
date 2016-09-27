@@ -42,8 +42,12 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    @yield('head')
 </head>
-<body class=" @if(Request::is('login')) hold-transition login-page @else hold-transition skin-blue sidebar-mini @endif">
+<body class="
+        @if(Request::is('login')) hold-transition login-page
+        @else hold-transition skin-blue sidebar-mini
+        @endif">
 @if(!Request::is('login'))
     <div class="wrapper">
 
@@ -113,3 +117,5 @@
         <script src="{{asset('admin/dist/js/app.js')}}"></script>
    </div>
 @endif
+</body>
+</html>

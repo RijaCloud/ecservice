@@ -106,18 +106,26 @@
                                 <div class="form-group">
                                     <label for="name">Nom de la place</label>
                                     <input type="text" class="form-control" id="name" name="name" placeholder="Ex:Yaccoo">
+                                    <span class="error alert alert-danger hidden"></span>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Description</label>
                                     <textarea class="form-control" id="description" name="description" placeholder="Ex:Magasin..."></textarea>
+                                    <span class="error alert alert-danger hidden"></span>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="longitude">Longitude</label>
                                     <input type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude">
+                                    <span class="error alert alert-danger hidden"></span>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="latitude">Latitude</label>
                                     <input type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude">
+                                    <span class="error alert alert-danger hidden"></span>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="fokontany">Fokontany de : </label>
@@ -201,7 +209,32 @@
             $('#place').on('submit', function(e) {
 
                 e.preventDefault();
-                $.ajax({data:$(this).serialize(),url:$(this).attr('action'),method:$(this).attr('method')})
+
+                var name = $('#name');
+                var description = $('#description');
+                var longitude = $('#longitude');
+                var latitude = $('#latitude');
+
+                var error = $('.input-group span.error');
+                for(var i = 0 ; i < error.length ; i++) {
+                    if(!$(error[i]).hasClass('hidden'))
+                        $(error[i]).addClass('hidden')
+                }
+
+                $.ajax({data:$(this).serialize(),url:$(this).attr('action'),method:$(this).attr('method')}).done(function() {
+                    name.val('')
+                    description.val('')
+                    longitude.val('')
+                    latitude.val('')
+                }).fail(function(data) {
+                    var error = data.responseJSON;
+
+                    for(var e in error) {
+
+                        $("#"+e).next('span.error').removeClass('hidden').text(error[e][0]);
+
+                    }
+                })
 
             });
 

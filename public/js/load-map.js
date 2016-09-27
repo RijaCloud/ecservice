@@ -48,7 +48,7 @@ var app  = {
         initMap : function(element, param = null)  {
 
             var pos = (param !== null) ? {lat:param.lat,lng:param.lng} : {lat: -18.9149, lng: 47.5316};
-
+            
             var search = {};
 
             app.map.carte = new google.maps.Map(element, {
@@ -163,6 +163,7 @@ var app  = {
                 center: {lat: -18.9149, lng: 47.5316}
             })
 
+
             for(var e = 0 ; e < element.length ; e++) {
 
                 var latitude = element[e].getAttribute('data-lat')
@@ -175,11 +176,11 @@ var app  = {
                     position: latLng,
                     html: marker_name
                 })
-
+                
                 app.map.popup['map'+e] = new google.maps.InfoWindow()
-                app.map.popup['map'+e].setPosition({lat:latitude,lng:longitude})
+                app.map.popup['map'+e].setPosition(new google.maps.LatLng(latitude,longitude))
 
-                google.maps.event.addListener(app.map.marker['map'+e], 'hover', function() {
+                google.maps.event.addListener(app.map.marker['map'+e], 'click', function() {
 
                     var popup = '<div id="content">'+
                         '<span class="pan" style="color:black!important;">'+

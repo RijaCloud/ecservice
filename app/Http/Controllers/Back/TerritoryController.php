@@ -62,6 +62,12 @@ class TerritoryController extends Controller
 
     }
 
+    /**
+     * Read on country
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
     public function readCountry(Request $request, $id) {
         $id = explode('-',$id)[0];
 
@@ -75,11 +81,23 @@ class TerritoryController extends Controller
         
     }
 
+    /**
+     * Update a country
+     * @param CountryRequest $request
+     * @param $id
+     */
     public function updateCountry(CountryRequest $request, $id) {
         
         $this->repository->updateRegion($id, $request->only('name','parent','description','latitude','longitude'));
             
     }
+    
+    public function allCountry() {
+        
+        
+        
+    }
+    
     /**
      * Return the town view
      * If the current Request is XMLHttpRequest , it return a partial view

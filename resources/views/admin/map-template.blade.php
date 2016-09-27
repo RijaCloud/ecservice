@@ -128,7 +128,7 @@
                                         <div class="product-info">
                                             <?php $uri = last( explode('/',Request::url()) ); ?>
 
-                                            <a href="{{ route('territory.read'.ucfirst($uri) , $last->id."-".ucfirst($last->nom)) }}" class="product-title">
+                                            <a href="{{ route('territory.read'.ucfirst($uri) , $last->id."-".ucfirst(str_replace('','-',$last->nom))) }}" class="product-title">
                                                 {{ $last->nom }}
                                             </a>
                                                 <span class="product-description">

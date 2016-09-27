@@ -65,22 +65,27 @@
                                     <div class="form-group">
                                         <label for="name">Me localisé :</label>
                                         <button id="localisation" class="btn btn-sm btn-info btn-flat pull-right">Localisation</button>
+                                        <span class="error alert alert-danger hidden"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="name">Nom de la place</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Ex:Yaccoo" value="{{ $place->lieu->string_lieu }}">
+                                        <span class="error alert alert-danger hidden"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Description</label>
                                         <textarea class="form-control" id="description" name="description" placeholder="Ex:Magasin...">{{ $place->lieu->description }}</textarea>
+                                        <span class="error alert alert-danger hidden"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="longitude">Longitude</label>
                                         <input type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude" value="{{ (string) $place->lieu->longitude }}">
+                                        <span class="error alert alert-danger hidden"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="latitude">Latitude</label>
                                         <input type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude" value="{{ (string) $place->lieu->latitude }}">
+                                        <span class="error alert alert-danger hidden"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -168,7 +173,26 @@
             $('#place').on('submit', function(e) {
 
                 e.preventDefault();
-                $.ajax({data:$(this).serialize(),url:$(this).attr('action'),method:$(this).attr('method')})
+
+                var loader = $('.img-loader');
+                var error = $('.input-group span.error');
+                for(var i = 0 ; i < error.length ; i++) {
+                    if(!$(error[i]).hasClass('hidden'))
+                        $(error[i]).addClass('hidden')
+                }
+                    loader.removeClass('hidden')
+                $.ajax({data:$(this).serialize(),url:$(this).attr('action'),method:$(this).attr('method')}).done(function() {
+                    loader.addClass('hidden')
+                }).fail(function(data) {
+                    var error = data.responseJSON;
+
+                    for(var e in error) {
+
+                        $("#"+e).next('span.error').removeClass('hidden').text(error[e][0]);
+
+                    }
+                    loader.addClass('hidden')
+                })
 
             });
 

@@ -9,7 +9,7 @@ var app  = {
         getZoom : function() {
 
             let url = window.location.href.split('/') ;
-            let regex = /([0-9])-([a-zA-Z]+)/gi
+            let regex = /([0-9])(-([a-zA-Z]+))?/gi
             url =  regex.test(url[url.length-1]) ? url[url.length-2] : url[url.length-1];
 
             switch(url) {
@@ -198,12 +198,14 @@ var app  = {
                     map_latitude.value = latitude;
 
                     update_url.setAttribute('href',url)
-                    delete_url.setAttribute('href',url2)
+                    delete_url.setAttribute('action',url2)
+
                 } else {
 
 
                 }
 
+                document.querySelector('.img-loader').classList.add('hidden')
             }
             http.send()
         }

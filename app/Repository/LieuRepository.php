@@ -232,10 +232,10 @@ class LieuRepository {
             foreach($specified as $sp) {
                 $long_query->$sp();
             }
-            return $long_query->get();
+            return $long_query->with('lieu')->get();
             
         } else {
-            return  $this->moto->whereFokontanyId($param)->with('lieu')->get();
+            return  $this->moto->where("fokontany_id",$param)->with('lieu')->get();
 
         }
 

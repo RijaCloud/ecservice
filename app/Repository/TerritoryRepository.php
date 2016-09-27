@@ -249,7 +249,7 @@
          */
         public function oneDepartement($id) {
 
-            return $this->departement->where('id',$id)->orWhereNom($id)->first();
+            return $this->departement->where('id',$id)->orWhere('nom',$id)->first();
 
         }
 

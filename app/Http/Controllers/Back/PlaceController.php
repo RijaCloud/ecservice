@@ -85,7 +85,10 @@ class PlaceController extends Controller
     public function deletePlace($id) {
         $id = explode('-',$id)[0];
 
-        $this->place->deleteById($id);
+        $delete = $this->place->deleteById($id);
+
+        if($delete)
+            return back()->withInput(['success'=>'Lieu bien supprimer']);
         
     } 
     
