@@ -162,8 +162,7 @@ var app  = {
                 zoom: 16,
                 center: {lat: -18.9149, lng: 47.5316}
             })
-
-
+            
             for(var e = 0 ; e < element.length ; e++) {
 
                 var latitude = element[e].getAttribute('data-lat')
@@ -180,6 +179,8 @@ var app  = {
                 app.map.popup['map'+e] = new google.maps.InfoWindow()
                 app.map.popup['map'+e].setPosition(new google.maps.LatLng(latitude,longitude))
 
+                var i = e;
+
                 google.maps.event.addListener(app.map.marker['map'+e], 'click', function() {
 
                     var popup = '<div id="content">'+
@@ -189,8 +190,8 @@ var app  = {
                         '</span>'+
                         '</div>';
 
-                    app.map.popup['map'+e].setContent(popup)
-                    app.map.popup['map'+e].open(this.getMap(),this)
+                    app.map.popup['map'+i].setContent(popup)
+                    app.map.popup['map'+i].open(this.getMap(),this)
 
                 })
             }
