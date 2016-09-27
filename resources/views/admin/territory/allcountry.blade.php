@@ -10,14 +10,14 @@
 
         @include('admin.content-header' ,
             [
-            'title'=>'Places',
+            'title'=>'Regions',
             'link'=>[
                 ['name'=>'Acceuil','url'=>route('admin.index')],
-                ['name'=>'Places','url'=>route('territory.indexPlace')],
+                ['name'=>'Regions','url'=>route('territory.country')],
                 ['name'=>'Listes des CycleServices existant']
             ]])
 
-        @include('admin.all',['latest'=>$latest])
+        @include('admin.all',['latest'=>$latest,'title'=>'Country'])
 
     </div>
     <script >
@@ -62,4 +62,4 @@
             });
         });
     </script>
-    @endsection
+@endsection

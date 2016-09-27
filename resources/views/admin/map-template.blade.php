@@ -145,7 +145,7 @@
                         </ul>
                     </div>
                     <div class="box-footer text-center">
-                        Administration EveryCycle
+                        <a href="{{ route('territory.all'.ucfirst($title)) }}">Tout affiché</a>
                     </div>
                 </div>
             </div>

@@ -176,8 +176,8 @@ var app  = {
 
                      var loaded_map = JSON.parse(http.responseText);
 
-                     var latitude = loaded_map.lieu.latitude ;
-                     var longitude = loaded_map.lieu.longitude;
+                     var latitude = loaded_map.lieu.latitude ? loaded_map.lieu.latitude : loaded_map.latitude ;
+                     var longitude = loaded_map.lieu.longitude ? loaded_map.lieu.longitude : loaded_map.longitude ;
 
                      app.map.carte.setZoom(16)
                      app.map.carte.setCenter({lat:latitude,lng:longitude});
@@ -192,8 +192,8 @@ var app  = {
                     var map_latitude = document.getElementById('map-latitude');
                     var update_url = document.getElementById('edit');
                     var delete_url = document.getElementById('delete');
-                    map_name.value = loaded_map.lieu.string_lieu;
-                    map_description.value = loaded_map.lieu.description;
+                    map_name.value = loaded_map.lieu.string_lieu ? loaded_map.lieu.string_lieu : loaded_map.nom;
+                    map_description.value = loaded_map.lieu.description ? loaded_map.lieu.description : loaded_map.description;
                     map_longitude.value = longitude;
                     map_latitude.value = latitude;
 

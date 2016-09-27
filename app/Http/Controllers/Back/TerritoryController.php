@@ -74,7 +74,7 @@ class TerritoryController extends Controller
         $place = $this->repository->oneRegion($id);
         $parent = $this->repository->allProvince();
         if($request->isXmlHttpRequest()) {
-            return view('admin.ajaxify.territory.view-country',compact('place','parent'));
+            return $place;
         } else {
             return view('admin.territory.view-country',compact('place','parent'));
         }
@@ -94,7 +94,9 @@ class TerritoryController extends Controller
     
     public function allCountry() {
         
+        $data = $this->repository->allRegion();
         
+        return view('admin.territory.allcountry',['latest'=>$data]);
         
     }
     
@@ -140,12 +142,21 @@ class TerritoryController extends Controller
         $place = $this->repository->oneCommune($id);
         $parent = $this->repository->allDepartement();    
         if($request->isXmlHttpRequest()) {
-            return view('admin.ajaxify.territory.view-town',compact('place','parent'));
+            return $place;
         } else {
             return view('admin.territory.view-town',compact('place','parent'));
         }
 
     }
+    
+    public function allTown() {
+        
+        $data = $this->repository->allCommune();
+        
+        return view('admin.territory.alltown',['latest'=>$data]);
+        
+    }
+    
     /**
      * Return the province view
      * If the current Request is XMLHttpRequest , it return a partial view
@@ -188,13 +199,22 @@ class TerritoryController extends Controller
         $place = $this->repository->oneProvince($id);
 
         if($request->isXmlHttpRequest()) {
-            return view('admin.ajaxify.territory.view-province',compact('place'));
+            return $place;
         } else {
             return view('admin.territory.view-province',compact('place'));
         }
 
     }
 
+    
+    public function allProvince() {
+        
+        $data = $this->repository->allProvince();
+        
+        return view('admin.territory.allprovince',['latest'=>$data ]);
+        
+    }
+    
     public function state() {
 
         return view('admin.territory.state');
@@ -240,11 +260,20 @@ class TerritoryController extends Controller
         $place = $this->repository->oneFokontany($id);
         $parent = $this->repository->allCommune();
         if($request->isXmlHttpRequest()) {
-            return view('admin.ajaxify.territory.view-fokontany',compact('place','parent'));
+            return $place;
         } else {
             return view('admin.territory.view-fokontany',compact('place','parent'));
         }
 
+    }
+    
+    public function allFokontany() {
+        
+        $data = $this->repository->allFokontany();
+        
+        return view('admin.territory.allfokontany',['latest'=>$data]);
+        
+        
     }
     
     /**
@@ -286,10 +315,19 @@ class TerritoryController extends Controller
         $place = $this->repository->oneDepartement($id);
         $parent = $this->repository->allRegion();
         if($request->isXmlHttpRequest()) {
-            return view('admin.ajaxify.territory.view-departement',compact('place','parent'));
+            return $place;
         } else {
             return view('admin.territory.view-departement',compact('place','parent'));
         }
 
+    }
+
+    public function allDepartement() {
+        
+        $data = $this->repository->allDepartement();
+        
+        return view ('admin.territory.alldepartement',['latest'=>$data]);
+        
+        
     }
 }

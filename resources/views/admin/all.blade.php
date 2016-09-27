@@ -15,18 +15,39 @@
                     <table id="datatable_e" class="table table-bordered table-striped">
                         <thead>
                         <tr>
+                            @if(Request::is('territory.allPlace'))
                             <td>No.</td>
                             <td>Name</td>
                             <td>Description</td>
+                                @else
+                                <td>No.</td>
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Lieux affilié</td>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
                         @if(!empty($latest))
+
                             @foreach($latest as $last)
-                                <tr style="cursor:pointer;" data-link="{{ route('territory.readPlace',['id'=>$last->id]) }}" data-delete="{{ route('territory.deletePlace',['id'=>$last->id]) }}" class="to-map">
+
+                                <?php
+                                $link = Request::is('territory.allPlace') ? route('territory.readPlace',['id'=>$last->id]) : route('territory.read'.ucfirst($title) , ['id'=>$last->id.'-'.$last->nom])
+                                ?>
+
+                                <tr style="cursor:pointer;" data-link="{{ $link }}" data-delete="{{ route('territory.deletePlace',['id'=>$last->id]) }}" class="to-map">
+                                        @if(Request::is('territory.allPlace'))
                                     <td>{{ $last->id }}</td>
                                     <td>{{ $last->string_lieu }}</td>
                                     <td>{{ $last->description }}</td>
+                                            @else
+                                        <td>{{ $last->id }}</td>
+                                        <td>{{ $last->nom }}</td>
+                                        <td>{{ $last->description }}</td>
+                                        <td></td>
+
+                                    @endif
                                 </tr>
                             @endforeach
                         @else
@@ -111,7 +132,6 @@
         </div>
     </div>
 </section>
-</div>
 
 <script src="{{ asset('admin/js/load-map.js') }}"></script>
 
