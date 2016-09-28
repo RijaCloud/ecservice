@@ -15,7 +15,7 @@
                     <table id="datatable_e" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            @if(Request::is('territory.allPlace'))
+                            @if(Route::current()->getName() == 'territory.allPlace')
                             <td>No.</td>
                             <td>Name</td>
                             <td>Description</td>
@@ -33,11 +33,11 @@
                             @foreach($latest as $last)
 
                                 <?php
-                                $link = Request::is('territory.allPlace') ? route('territory.readPlace',['id'=>$last->id]) : route('territory.read'.ucfirst($title) , ['id'=>$last->id.'-'.$last->nom])
+                                $link = Route::current()->getName() == 'territory.allPlace' ? route('territory.readPlace',['id'=>$last->id.'-'.$last->nom]) : route('territory.read'.ucfirst($title) , ['id'=>$last->id.'-'.$last->nom])
                                 ?>
 
                                 <tr style="cursor:pointer;" data-link="{{ $link }}" data-delete="{{ route('territory.deletePlace',['id'=>$last->id]) }}" class="to-map">
-                                        @if(Request::is('territory.allPlace'))
+                                        @if(Route::current()->getName() == 'territory.allPlace')
                                     <td>{{ $last->id }}</td>
                                     <td>{{ $last->string_lieu }}</td>
                                     <td>{{ $last->description }}</td>

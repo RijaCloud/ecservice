@@ -17,7 +17,7 @@
                 ['name'=>'Listes des CycleServices existant']
             ]])
 
-        @include('admin.all',['latest'=>$latest])
+        @include('admin.all',['latest'=>$latest,'title'=>'Place'])
 
     </div>
     <script >

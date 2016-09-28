@@ -29,12 +29,12 @@ Route::group(['middleware'=>'auth','prefix'=>'gstion/admin'], function() {
     
     Route::group(['prefix'=>'territory'], function() {
 
-        Route::get('/place/all','Back\PlaceController@all')->name('territory.allPlace');    
+        Route::get('/place/all','Back\PlaceController@all')->name('territory.allPlace');
         Route::get('/place','Back\PlaceController@index')->name('territory.indexPlace');
         Route::post('/place','Back\PlaceController@store')->name('territory.createPlace');
         Route::get('/place/{id}','Back\PlaceController@readPlace')->name('territory.readPlace')->where('id','([0-9]+)(-)?([a-zA-Z-]+)?');
         Route::post('/place/{id}/update','Back\PlaceController@updatePlace')->name('territory.updatePlace')->where('id','([0-9]+)');
-        Route::post('/place/{id}/delete','Back\PlaceController@deletePlace')->name('territory.deletePlace')->where('id','([0-9])');
+        Route::post('/place/{id}/delete','Back\PlaceController@deletePlace')->name('territory.deletePlace')->where('id','([0-9]+)');
 
         Route::get('/country','Back\TerritoryController@country')->name('territory.country');
         Route::post('/country','Back\TerritoryController@createCountry')->name('territory.createCountry');
