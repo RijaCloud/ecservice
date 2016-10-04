@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="community col-lg-10" >
+<div class="community col-lg-12" >
     @include('absolute.nav')
     <div class="middle-index">
         <h1>EveryCycle</h1>
@@ -14,25 +14,14 @@
     <div class="middle-research">
         <form id="indexInput" action="{{ url('fokontany') }}" method="GET">
             <div class="toggle-input">
-                <label for="multiple">
-                    Je cherche :
-                </label>
-                <select name="sv" id="multiple">
-                    <option value="part">Pieces </option>
-                    <option value="accessory">Accessoires </option>
-                    <option value="garage">Reparations </option>
-                    <option value="personnalisation">Personnalisation </option>
-                </select>
-            </div>
-            <div class="toggle-input-right">
-                <select name="commune" class="select2" id="single_select" style="
-                width:40%!important;outline:none!important;padding:20px!important;" tabindex="-1">
-                    @foreach($fokontany as $f)
-                        <option value="{{ $f->nom }}">{{ $f->nom }}</option>
-                    @endforeach
-                </select>
+                <div style="position:relative">
+                    <input type="text" placeholder="Je recherche" id="mys" class="aria-search">
+                </div>
+                <div class="dropdown"></div>
                 <button type="submit" class="btn btn-primary"></button>
+
             </div>
+
             <div class="clearfix"></div>
 
         </form>
@@ -47,7 +36,7 @@
 @section('footer')
 <script src="{{ asset('bower_components/jquery/dist/jquery.js') }}"></script>
 <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.js') }}"></script>
-<script src="{{ asset('js/select2/dist/js/select2.js') }}"></script>
+<script src="{{ asset('js/home-search.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('.select2').select2({
