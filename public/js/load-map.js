@@ -7,6 +7,7 @@ var app  = {
         carte : [],
         searchbox : [],
         popup : [],
+        icon : [],
         getZoom : function() {
 
             let url = window.location.href.split('/') ;
@@ -54,7 +55,8 @@ var app  = {
             app.map.carte = new google.maps.Map(element, {
                 zoom: app.map.getZoom(),
                 center: pos,
-                mapTypeId : google.maps.MapTypeId.HYBRID
+                mapTypeId : google.maps.MapTypeId.HYBRID,
+
             });
 
             app.map.marker = new google.maps.Marker({
@@ -156,11 +158,26 @@ var app  = {
             http.send()
         
         },
-        getDataMarkerAndLoadMap : function(element){
+        getDataMarkerAndLoadMap : function(element, param = {}){
 
+            if(param) {
+                icon = param
+            }
             app.map.carte = new google.maps.Map(document.getElementById('canvas'), {
                 zoom: 16,
-                center: {lat: -18.9149, lng: 47.5316}
+                center: {lat: -18.9149, lng: 47.5316},
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+                    mapTypeIds: [
+                        google.maps.MapTypeId.ROADMAP,
+                        google.maps.MapTypeId.TERRAIN,
+                        google.maps.MapTypeId.HYBRID,
+                    ]
+                },
+                zoomControlOptions: {
+                    position : google.maps.ControlPosition.LEFT_TOP
+                },
             })
             
             for(var e = 0 ; e < element.length ; e++) {
@@ -195,6 +212,17 @@ var app  = {
 
                 })
             }
+
+            document.querySelectorAll('.marked').forEach(function(dx,el) {
+
+                dx.addEventListener('mouseover', function() {
+                    var lat = this.getAttribute('data-lat')
+                    var lng = this.getAttribute('data-lng')
+                    
+                    app.map.carte.setCenter({lat:lat,lng:lng})
+                })
+
+            })
 
         }
 

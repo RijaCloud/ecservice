@@ -14,14 +14,14 @@
     <div class="body-container" id="body">
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="canvas-container">
                     <div id="canvas" style="position:relative;max-width:100%;max-height:100%">
 
                     </div>
                 </div>
             </div>
-            <div class="col-md-6" id="section-right">
+            <div class="col-md-8" id="section-right">
                 <div class="content-fixed-top animated" id="topRight" data-moved="true">
                     <span class="top-content">
                         Recherche avancée :
@@ -56,7 +56,7 @@
             $('#group').css('max-height',height);
             $('#group').css('min-height',height);
             $('.canvas-container').css('height',height);
-            $('#canvas').css('height',height-30);
+            $('#canvas').css('height',height-60).css('padding-bottom',20);
         })
     </script>
     <script>
@@ -81,7 +81,13 @@
     </script>
     <script>
         $(window).load(function() {
-            app.map.getDataMarkerAndLoadMap(document.querySelectorAll('.marked'))
+            app.map.getDataMarkerAndLoadMap(document.querySelectorAll('.marked'),
+            {
+                bike: "{{ asset('img/bike2.png') }}",
+                repair: "{{ asset('img/repair.png') }}",
+                oil: "{{ asset('img/oil2.png') }}",
+            })
+
         })
     </script>
 @endsection

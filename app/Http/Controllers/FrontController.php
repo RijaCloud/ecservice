@@ -6,6 +6,7 @@ use App\Repository\LieuRepository;
 use App\Repository\TerritoryRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Intervention\Image\Facades\Image;
 
 class FrontController extends Controller
 {
@@ -44,17 +45,25 @@ class FrontController extends Controller
 
             $specified_query = [];
 
-            if($request->has('sv-h'))
-                array_push($specified_query,'huiles');
-            if($request->has('sv-acces'))
-                array_push($specified_query,'accessoires');
-            if($request->has('sv-g'))
-                array_push($specified_query,'garage');
-            if($request->has('sv-p'))
-                array_push($specified_query,'pieces');
-            if($request->has('sv-m'))
-                array_push($specified_query,'vente_moto');
+            if($request->has('sv')) {
+                
+                array_push($specified_query,strtolower($request->get('sv')));
+                
+            } else {
 
+                if($request->has('sv-h'))
+                    array_push($specified_query,'huiles');
+                if($request->has('sv-acces'))
+                    array_push($specified_query,'accessoires');
+                if($request->has('sv-g'))
+                    array_push($specified_query,'garage');
+                if($request->has('sv-p'))
+                    array_push($specified_query,'pieces');
+                if($request->has('sv-m'))
+                    array_push($specified_query,'vente_moto');
+
+            }
+            
             $thatPlace = $this->lieux->allWhereFokontany($search->id,$specified_query);
 
             return view('partial.services',compact('thatPlace'));
@@ -70,6 +79,5 @@ class FrontController extends Controller
         }
 
     }
-
 
 }

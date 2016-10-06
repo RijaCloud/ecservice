@@ -15,7 +15,7 @@
         <form id="indexInput" action="{{ url('fokontany') }}" method="GET">
             <div class="toggle-input">
                 <div style="position:relative">
-                    <input type="text" placeholder="Je recherche" id="mys" class="aria-search">
+                    <input type="text" placeholder="Je recherche" name="sv" id="mys" class="aria-search">
                 </div>
                 <div class="dropdown"></div>
                 <button type="submit" class="btn btn-primary"></button>
