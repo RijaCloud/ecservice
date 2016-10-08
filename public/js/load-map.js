@@ -160,12 +160,14 @@ var app  = {
         },
         getDataMarkerAndLoadMap : function(element, param = {}){
 
+            var coords = {lat: -18.9149, lng: 47.5316}
+
             if(param) {
-                icon = param
+                coords = new google.maps.LatLng(param.center.lat,param.center.lng)
             }
             app.map.carte = new google.maps.Map(document.getElementById('canvas'), {
                 zoom: 16,
-                center: {lat: -18.9149, lng: 47.5316},
+                center: coords,
                 mapTypeControl: true,
                 mapTypeControlOptions: {
                     style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
@@ -178,6 +180,7 @@ var app  = {
                 zoomControlOptions: {
                     position : google.maps.ControlPosition.LEFT_TOP
                 },
+                draggable: false
             })
             
             for(var e = 0 ; e < element.length ; e++) {
@@ -185,43 +188,54 @@ var app  = {
                 var latitude = element[e].getAttribute('data-lat')
                 var longitude = element[e].getAttribute('data-lng')
                 var marker_name = element[e].getAttribute('data-name')
+                var id = element[e].getAttribute('data-id')
                 var latLng = new google.maps.LatLng(latitude,longitude)
 
-                app.map.marker['map'+e] = new google.maps.Marker({
+                app.map.marker['map'+id] = new google.maps.Marker({
                     map : app.map.carte,
                     position: latLng,
                     html: marker_name
                 })
                 
-                app.map.popup['map'+e] = new google.maps.InfoWindow()
-                app.map.popup['map'+e].setPosition(new google.maps.LatLng(latitude,longitude))
+                app.map.popup['map'+id] = new google.maps.InfoWindow()
+
+                var popup = '<div id="content">'+
+                    '<span class="pan" style="color:black!important;">'+
+                    marker_name
+                    +
+                    '</span>'+
+                    '</div>';
+
+                app.map.popup['map'+id].setContent(popup)
+
+                app.map.popup['map'+id].setPosition(new google.maps.LatLng(latitude,longitude))
 
                 var i = e;
 
-                google.maps.event.addListener(app.map.marker['map'+e], 'click', function() {
+                google.maps.event.addListener(app.map.marker['map'+id], 'click', function() {
 
-                    var popup = '<div id="content">'+
-                        '<span class="pan" style="color:black!important;">'+
-                        this.html
-                        +
-                        '</span>'+
-                        '</div>';
-
-                    app.map.popup['map'+i].setContent(popup)
-                    app.map.popup['map'+i].open(this.getMap(),this)
+                    app.map.popup['map'+id].open(this.getMap(),this)
 
                 })
             }
+            console.log(app.map.popup);
 
             document.querySelectorAll('.marked').forEach(function(dx,el) {
 
                 dx.addEventListener('mouseover', function() {
                     var lat = this.getAttribute('data-lat')
                     var lng = this.getAttribute('data-lng')
-                    
-                    app.map.carte.setCenter({lat:lat,lng:lng})
+                    var id = this.getAttribute('data-id')
+                    app.map.carte.setCenter(new google.maps.LatLng(lat, lng))
+                    app.map.popup['map'+id].setPosition(new google.maps.LatLng(lat,lng));
+                    app.map.popup['map'+id].open(app.map.carte,app.map.marker['map'+id])
                 })
 
+                dx.addEventListener('mouseout', function() {
+                    var id = this.getAttribute('data-id')
+
+                    app.map.popup['map'+id].close()
+                })
             })
 
         }

@@ -1,7 +1,7 @@
 <ul class="list-group" id="group">
-    @if(count($thatPlace) != 0)
-        @foreach($thatPlace as $p)
-            <li class="list-group-item shade-list marked" data-lng="{{ isset($p->longitude) ? $p->longitude : $p->lieu['longitude']}}" data-lat="{{ isset($p->latitude) ? $p->latitude : $p->lieu['latitude']}}" data-name="{{ isset($p->string_lieu) ? $p->string_lieu : $p->lieu['string_lieu']}}">
+    @if(count($place) != 0)
+        @foreach($place as $p)
+            <li class="list-group-item shade-list marked" data-id="{{ $p->id }}" data-lng="{{ isset($p->longitude) ? $p->longitude : $p->lieu['longitude']}}" data-lat="{{ isset($p->latitude) ? $p->latitude : $p->lieu['latitude']}}" data-name="{{ isset($p->string_lieu) ? $p->string_lieu : $p->lieu['string_lieu']}}">
                 <div class="group-content">
                     <h5><strong>{{ (isset($p->string_lieu)) ? $p->string_lieu : $p->lieu['string_lieu'] }}</strong> </h5>
                     <span class="content-address"></span>

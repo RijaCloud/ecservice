@@ -9,14 +9,15 @@
                     <form action="/search" method="get" id="search">
                         <div class="inputSearch inputWithDropdown">
                             <span class="input-holder">
-                                <input type="text" name="sv" id="searchBar" autocomplete="off" max-length="200">
+                                <input type="text" name="sv" id="searchBar" autocomplete="off" placeholder="Je recherche" max-length="200">
                             </span>
-                            <div class="dropdown clearfix">
+                            <div class="dropdown clearfix" id="todroplist">
                                 <div class="list"></div>
                             </div>
                         </div>
                         <div class="selectSearch setInput">
-                            <input type="text" name="sfk" id="nearSfk" placeholder="" max-length="200">
+                            <input type="text" name="sfk" id="nearSfk" placeholder="Fokontany" max-length="200">
+                            <div class="dropdown clearfix" id="fknlist"></div>
                         </div>
                         <button class="btn-submit" type="submit">
                             <span class="glyphicon glyphicon-search "></span>

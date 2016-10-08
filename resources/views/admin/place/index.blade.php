@@ -97,7 +97,7 @@
                         </div>
                         <div class="box-body">
 
-                            <form id="place"  action="{{ route('territory.createPlace') }}" method="POST">
+                            <form id="place" enctype="multipart/form-data" action="{{ route('territory.createPlace') }}" method="POST">
                                 {{csrf_field()}}
                                 <div class="form-group">
                                     <label for="name">Me localisé :</label>
@@ -125,6 +125,11 @@
                                     <label for="latitude">Latitude</label>
                                     <input type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude">
                                     <span class="error alert alert-danger hidden"></span>
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="latitude">Image</label>
+                                    <input type="file" class="form-control" name="image" id="image">
 
                                 </div>
                                 <div class="form-group">
@@ -206,6 +211,12 @@
     <script>
         $(function() {
 
+            var file ;
+
+            $('input[type=file]').on('change',function(e) {
+                file = e.target.files;
+            })
+
             $('#place').on('submit', function(e) {
 
                 e.preventDefault();
@@ -219,9 +230,34 @@
                 for(var i = 0 ; i < error.length ; i++) {
                     if(!$(error[i]).hasClass('hidden'))
                         $(error[i]).addClass('hidden')
+
                 }
 
-                $.ajax({data:$(this).serialize(),url:$(this).attr('action'),method:$(this).attr('method')}).done(function() {
+                var data = new FormData();
+
+                if(file) {
+                       data.append("file",file[0]);
+                }
+
+                var box = $('input[type=checkbox]:checked');
+                box.each(function() {
+                    data.append($(this).attr('name'),$(this).attr('value'));
+                })
+                data.append('name',name.val())
+                data.append('description',description.val())
+                data.append('longitude',longitude.val())
+                data.append('latitude',latitude.val())
+                data.append('fokontany',$('#fokontany').val())
+                data.append('_token',$('input[type=hidden]').val())
+
+                $.ajax({
+                    data:data,
+                    url:$(this).attr('action'),
+                    method:$(this).attr('method'),
+                    cache: false,
+                    processData: false,
+                    contentType: false
+                }).done(function() {
                     name.val('')
                     description.val('')
                     longitude.val('')

@@ -14,14 +14,14 @@
     <div class="body-container" id="body">
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <div class="canvas-container">
                     <div id="canvas" style="position:relative;max-width:100%;max-height:100%">
 
                     </div>
                 </div>
             </div>
-            <div class="col-md-8" id="section-right">
+            <div class="col-md-4" id="section-right">
                 <div class="content-fixed-top animated" id="topRight" data-moved="true">
                     <span class="top-content">
                         Recherche avancée :
@@ -30,13 +30,14 @@
                         <label for="display">Par:</label>
                         <ul id="display" class="display-t">
                             <li><input type="radio" id="input-1"  name="fokontany" value="fokontany">Fokontany</li>
-                            <li><input type="radio" id="input-2"  name="departement" value="departement">D&eacute;partement</li>
+                            <li><input type="radio" id="input-2"  name="departement" value="departement">District</li>
                             <li><input type="radio" id="input-3" name="region" value="region">R&eacute;gion</li>
                         </ul>
                     </form>
                 </div>
                 <section class="content-fixed" id="fixedRight">
-                    @include('absolute.loop-array',[$thatPlace])
+                    <?php $place = $thatPlace['place'] ?>
+                    @include('absolute.loop-array',[$place])
                 </section>
             </div>
 
@@ -50,6 +51,7 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjd71as-VYz99wgGgkT3l4FQ3pL14fEuc"></script>
 
     <script src="{{ asset('js/load-map.js') }}"></script>
+    <script src="{{ asset('js/bar-search.js') }}"></script>
     <script>
         $(function() {
             var height = $(window).height() - $("header-fixed").height();
@@ -83,6 +85,10 @@
         $(window).load(function() {
             app.map.getDataMarkerAndLoadMap(document.querySelectorAll('.marked'),
             {
+                center: {
+                    lat: "{{  isset($thatPlace['center']) ?  $thatPlace['center']['lat'] : -18.9149 }}",
+                    lng: "{{  isset($thatPlace['center']) ? $thatPlace['center']['lng'] : 47.5316 }}"
+                },
                 bike: "{{ asset('img/bike2.png') }}",
                 repair: "{{ asset('img/repair.png') }}",
                 oil: "{{ asset('img/oil2.png') }}",

@@ -66,11 +66,16 @@ class FrontController extends Controller
             
             $thatPlace = $this->lieux->allWhereFokontany($search->id,$specified_query);
 
+            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
+                'lat' => $search->latitude,
+                'lng' => $search->longitude
+            ]]);
+        
             return view('partial.services',compact('thatPlace'));
 
         } else {
 
-            $thatPlace = $this->lieux->allPlaceWithNoConstraint()->get();
+            $thatPlace = ['place'=>$this->lieux->allPlaceWithNoConstraint()->get()];
             
             $link = $this->lieux->allPlaceWithNoConstraint()->paginate()->render();
 

@@ -17,7 +17,6 @@ $(function() {
 
     $('#mys').on('focus', function() {
         var $drop = $(this).parent().next('.dropdown');
-        $drop.attr('aria-open','opened');
         $drop.append($drop_element);
     })
 

@@ -60,7 +60,7 @@ class Moto extends Model
      * @param $query
      * @return mixed
      */
-    public function scopePerso($query) {
+    public function scopePersonnalisation($query) {
 
         return $query->where('personnalisation',true);
 

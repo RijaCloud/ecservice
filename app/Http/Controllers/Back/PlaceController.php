@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Back;
 
+use App\Events\ImageToUpload;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlaceRequest;
+use App\Jobs\StoreAndSaveImage;
 use App\Repository\LieuRepository;
 use App\Repository\MotoRepository;
 use App\Repository\TerritoryRepository;
@@ -58,8 +60,8 @@ class PlaceController extends Controller
     }
     
     public function store(PlaceRequest $request, MotoRepository $moto) {
-        
-        $info = $request->only('name','description','fokontany','latitude','longitude','_token');
+
+        $info = $request->only('name','description','fokontany','latitude','longitude','_token','file');
 
         $description = array_diff($request->all(),$info);
         $fokontany = $this->repository->oneFokontany($request->input('fokontany'));
@@ -67,11 +69,20 @@ class PlaceController extends Controller
         $departement = $this->repository->oneDepartement($commune['departement_id']);
         $region = $this->repository->oneRegion($departement['region_id']);
         $province = $this->repository->oneProvince($region['province_id']);
+
         $new_array = ['fokontany'=>$request->input('fokontany'),'commune'=>$commune->id,'departement'=>$departement->id,'region'=>$region->id,'province'=>$province->id];
 
         $merge_array = array_merge($info, $new_array);
 
         $moto_merge = array_merge($description , $new_array);
+
+        if($request->hasFile('file')) {
+
+            event(new ImageToUpload($request->file('file')));
+
+        }
+
+        dd();
 
         $new_id = $this->place->store($merge_array);
         

@@ -9,7 +9,7 @@ class Lieu extends Model
 {
     protected $table = "lieu";
 
-    protected $fillable = ['string_lieu','latitude','longitude','description'];
+    protected $fillable = ['string_lieu','latitude','longitude','description','image','telephone','address','image'];
 
     protected $hidden = ['created_at','updated_at','fokontany_id'];
     
@@ -57,6 +57,12 @@ class Lieu extends Model
         
     }
 
+    public function image() {
+        
+        return $this->hasOne(Image::class);
+        
+    }
+    
     public function scopeRandom($query ,$take) {
 
         return $query->orderBy(DB::raw('RAND()'))->take($take);
