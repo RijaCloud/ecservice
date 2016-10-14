@@ -15,15 +15,62 @@ $(function() {
         '</ul>' +
         '</div>')
 
+    var chosen = false;
+
     $('#mys').on('focus', function() {
         var $drop = $(this).parent().next('.dropdown');
         $drop.append($drop_element);
+        chosen = false
     })
 
     $('.toggle-input').on('click','.li-down',function (e) {
         e.stopPropagation();
         $('.down').remove()
         $('#mys').val( $(this).attr('data-value'))
+        chosen = true;
     })
 
+    $('#mysf').on('keyup' , function() {
+
+        if($(this).val().length >= 4) {
+
+            $.ajax({
+                url: "/search?s="+$(this).val()
+            }).done(function(data) {
+                var $drop = $(this).parent().next('.dropdown');
+
+                console.log(data);
+                
+            })
+
+        }
+
+    })
+
+    $('#mys').on('blur', function(e) {
+        e.stopPropagation()
+        if(chosen)
+            $(this).parent().next('.dropdown').find('.down').remove()
+    })
+
+    $('#indexInput').on('submit', function(event) {
+
+        event.preventDefault();
+
+        var ms = $('#mys');
+        var mf = $('#mysf');
+
+        if(mf.val() == "") {
+
+           window.location.href = "/fokontany?sv="+ms.val()
+
+        } else {
+
+            window.location.href = "/fokontany/"+mf.val()+"?sv="+ms.val()
+
+        }
+
+
+
+    })
 });

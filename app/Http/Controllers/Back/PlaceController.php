@@ -61,35 +61,33 @@ class PlaceController extends Controller
     
     public function store(PlaceRequest $request, MotoRepository $moto) {
 
-        $info = $request->only('name','description','fokontany','latitude','longitude','_token','file');
+        $info = $request->only('name','description','fokontany','latitude','longitude');
 
         $description = array_diff($request->all(),$info);
         $fokontany = $this->repository->oneFokontany($request->input('fokontany'));
         $commune = $this->repository->oneCommune($fokontany['commune_id']);
-        $departement = $this->repository->oneDepartement($commune['departement_id']);
-        $region = $this->repository->oneRegion($departement['region_id']);
+        $district = $this->repository->oneDistrict($commune['district_id']);
+        $region = $this->repository->oneRegion($district['region_id']);
         $province = $this->repository->oneProvince($region['province_id']);
 
-        $new_array = ['fokontany'=>$request->input('fokontany'),'commune'=>$commune->id,'departement'=>$departement->id,'region'=>$region->id,'province'=>$province->id];
+        $new_array = ['fokontany'=>$request->input('fokontany'),'commune'=>$commune->id,'district'=>$district->id,'region'=>$region->id,'province'=>$province->id];
 
         $merge_array = array_merge($info, $new_array);
 
         $moto_merge = array_merge($description , $new_array);
+        
+        $new_id = $this->place->store($merge_array);
 
         if($request->hasFile('file')) {
 
-            event(new ImageToUpload($request->file('file')));
+            event(new ImageToUpload($request->file('file'),$new_id));
 
         }
-
-        dd();
-
-        $new_id = $this->place->store($merge_array);
         
-        if(is_int($new_id))
-            $moto->store($new_id,$moto_merge);
+        if($new_id)
+            $moto->store($new_id->id,$moto_merge);
         else
-            return new HttpResponseException('Error');
+            return new HttpResponseException('error');
         
     }
     
@@ -123,8 +121,9 @@ class PlaceController extends Controller
     public function readPlace(Request $request ,$id) {
 
         $id = explode('-',$id)[0];
-        $place = $this->moto->getPlaceById($id);
 
+        $place = $this->moto->getPlaceById($id);
+       
         if(!is_null($id)) {
 
             if($request->isXmlHttpRequest()) {

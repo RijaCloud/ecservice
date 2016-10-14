@@ -13,17 +13,6 @@
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
-        <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-            </div>
-        </form>
-        <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="header">Navigation Principal</li>
@@ -65,7 +54,7 @@
                 <ul class="treeview-menu">
                     <li><a href="{{ route('territory.province') }}" class="histo-link"><i class="fa fa-circle-o"></i> Province</a></li>
                     <li><a href="{{ route('territory.country') }}" class="histo-link"><i class="fa fa-circle-o"></i> Regions</a></li>
-                    <li><a href="{{ route('territory.departement') }}" class="histo-link"><i class="fa fa-circle-o"></i> Departement</a></li>
+                    <li><a href="{{ route('territory.district') }}" class="histo-link"><i class="fa fa-circle-o"></i> District</a></li>
                     <li><a href="{{ route('territory.town') }}" class="histo-link"><i class="fa fa-circle-o"></i> Commune</a></li>
                     <li><a href="{{ route('territory.fokontany') }}" class="histo-link"><i class="fa fa-circle-o"></i> Fokontany</a></li>
                 </ul>

@@ -19,14 +19,13 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 html , body , .bg {
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    position: relative;
 }
 body {
 
     font-family: Whitney SSm A,Whitney SSm B,Helvetica,Arial,sans-serif;
     color: #000000;
     cursor: default;
-
 }
 a:hover {
     outline:none!important;
@@ -137,10 +136,9 @@ ul.dropdown-menu > li > a:hover {
 }
 .bg .bg-bgContent {
     position: absolute;
-    width: 200%;
-    height: 200%;
-    top: -50%;
-    left: -50%;
+    width: 100%;
+    height: 100%;
+
 }
 .bg-1 {
 
@@ -150,7 +148,7 @@ ul.dropdown-menu > li > a:hover {
 }
 .bg-bgContent .bg-full {
     width: 100%;
-    height: 51%;
+    height: 1%;
     background: -webkit-linear-gradient( 90deg , rgba(0, 0, 0, 0.72) 51% , transparent 100%);
     position: absolute;
     bottom: 0;
@@ -226,7 +224,7 @@ ul.dropdown-menu > li > a:hover {
     width: 100%;
     font-size: 23px;
 }
-.toggle-input input[type=text]::webkit-input-placeholder {
+.toggle-input input[type=text]::-webkit-input-placeholder {
     font-size: 17px;
 }
 .toggle-input-right {
@@ -235,9 +233,10 @@ ul.dropdown-menu > li > a:hover {
 }
 #indexInput .dropdown {
     position: absolute;
-    width: 70%;
+    width: 42%;
     /* bottom: 2px; */
     margin-top: 6px;
+    top: 70px;
 }
 #indexInput .dropdown .down {
     width: 100%;
@@ -388,6 +387,7 @@ ul.dropdown-menu > li > a:hover {
     top: 10px;
     width: 42px;
     border: none;
+    left: -48px;
 }
 #header-fixed input[type="text"] {
     border-image-source: initial;
@@ -419,12 +419,10 @@ ul.dropdown-menu > li > a:hover {
     padding-right: 0;
 }
 #body .col-md-4 {
-    padding-right: 10px;
+    padding-right: 20px;
 }
 #section-right {
-    overflow: auto;
     padding: 0;
-    border-left: 1px double #c9e2b3;
 }
 #topRight .top-content {
     display: block;
@@ -432,21 +430,28 @@ ul.dropdown-menu > li > a:hover {
 }
 #fixedRight {
     overflow-y: auto;
-    transform: translateY(-90px);
-    -webkit-transform: translateY(-90px);
+    /* transform: translateY(-90px); */
+    /* -webkit-transform: translateY(90px); */
     transition: all .4s ease;
+    margin-top: 10px;
+    margin-right: auto;
+    overflow-x: hidden;
+    max-height: 700px;
+    box-shadow: 0px 1px 1px 5px rgba(64, 63, 63, 0.04), 0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33);
 }
 #fixedRight ul .shade-list {
     padding: 10px 15px;
     cursor: pointer;
-    background-color: rgba(158, 158, 158, 0.08);
+    background-color: rgba(241, 235, 235, 0.08);
 }
 #fixedRight ul .shade-list:hover {
-    background-color: #f0fafb;
+    background-color: #e8eaea;
+    transition: all .5s ease;
 }
 #fixedRight ul .shade-list .group-content h5 {
     margin-bottom: 4px;
     float:left;
+    font-size: 17px;
 }
 #fixedRight ul .shade-list .group-content span {
     float:left;
@@ -456,6 +461,7 @@ ul.dropdown-menu > li > a:hover {
 }
 #territorySpecification ul li {
     display: inline-block;
+    margin: 5px;
 }
 #navRight {
     float:right;
@@ -480,20 +486,24 @@ ul.dropdown-menu > li > a:hover {
     transition: background .3s ease;
 }
 #topRight {
-    background: #2196F3;
-    box-shadow: inset 0px 1px 1px 5px rgba(64, 63, 63, 0.04), inset 0px 1px 1px 0px rgba(64, 63, 63, 0.33),inset 0px 1px 1px 0px rgba(64, 63, 63, 0.33),inset 0px 1px 1px 0px rgba(64, 63, 63, 0.33);
+    background: rgba(8, 132, 107, 0.97)!important;
+    box-shadow: 0px 1px 1px 5px rgba(64, 63, 63, 0.04), 0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33);
     padding: 10px 15px;
-    transform: translateY(-90px);
-    -webkit-transform: translateY(-90px);
+    /* transform: translateY(-90px); */
+    /* -webkit-transform: translateY(-90px); */
     transition: all .4s ease;
+    margin: 26px;
+    color: #fff;
 }
 #topRight .top-content {
     display: block;
-    font-size: 18px;
-    color: #795548;
+    font-size: 20px;
+    color: #fff;
 }
 #territorySpecification ul {
     display: inline-block;
+    margin-left: 10px;
+    transition: height .5s;
 }
 .slideUp {
     transform: translateY(-90px);
@@ -503,7 +513,6 @@ ul.dropdown-menu > li > a:hover {
     transition: all .4s ease;
 }
 #group {
-    overflow: auto;
     padding-bottom: 30px;
 }
 #todroplist {
@@ -523,4 +532,42 @@ ul.dropdown-menu > li > a:hover {
 }
 #todroplist ul li {
     padding: 10px;
+}
+.listicon {
+    padding-left: 13px;
+}
+.listicon ul {
+    list-style:none;
+}
+.listicon ul li {
+    display:inline-block;
+    position:relative;
+    max-width: 30px;
+}
+.listicon ul li img {
+    width: 100%;
+}
+.iradio_square {
+    height: 28px!important;
+    width: 23px!important;
+}
+.result {
+    position: absolute;
+    color: #000;
+    padding: 10px;
+    width: 400px;
+    box-shadow: 0px 0px 1px 1px #3a3838;
+    background: #fff;
+
+}
+.result .list {
+    color: #000;
+    padding: 10px;
+    width: 400px;
+    cursor:pointer;
+    width:100%;
+    height:100%;
+}
+#actif div {
+    display: inline-block;
 }

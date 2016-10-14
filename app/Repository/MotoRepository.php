@@ -23,7 +23,7 @@
             $moto->huiles = (array_key_exists('huiles',$input)) ? true : false;
             $moto->fokontany_id = $input['fokontany'];
             $moto->commune_id = $input['commune'];
-            $moto->departement_id = $input['departement'];
+            $moto->district_id = $input['district'];
             $moto->region_id = $input['region'];
             $moto->province_id = $input['province'];
             $moto->vente_moto = (array_key_exists('vente_moto',$input)) ? true : false;

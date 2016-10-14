@@ -1,3 +1,4 @@
+
 @extends('template.template')
 
 @section('title') Pieces Moto | EveryCycle @endsection
@@ -15,26 +16,70 @@
 
         <div class="row">
             <div class="col-md-8">
-                <div class="canvas-container">
-                    <div id="canvas" style="position:relative;max-width:100%;max-height:100%">
-
-                    </div>
+                <div class="canvas-container" style="
+    height: 501px;
+    margin: 30px;
+    margin-top: 10px;
+    box-shadow: 0px 1px 1px 5px rgba(64, 63, 63, 0.04), 0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33);
+        ">
+                    <div id="canvas" style="position:relative;max-width:100%;max-height:100%"></div>
                 </div>
-            </div>
-            <div class="col-md-4" id="section-right">
-                <div class="content-fixed-top animated" id="topRight" data-moved="true">
+                <div class="content-fixed-top animated" id="topRight">
                     <span class="top-content">
                         Recherche avancée :
                     </span>
-                    <form action="/" method="get" id="territorySpecification" class="territory-display">
+                    <form action="/"  method="get" id="territorySpecification" class="territory-display">
                         <label for="display">Par:</label>
                         <ul id="display" class="display-t">
-                            <li><input type="radio" id="input-1"  name="fokontany" value="fokontany">Fokontany</li>
-                            <li><input type="radio" id="input-2"  name="departement" value="departement">District</li>
-                            <li><input type="radio" id="input-3" name="region" value="region">R&eacute;gion</li>
+                            <li><input type="radio" id="input-1"  name="input" value="fokontany">Fokontany</li>
+                            <li><input type="radio" id="input-2"  name="input" value="district">District</li>
+                            <li><input type="radio" id="input-3" name="input" value="region">R&eacute;gion</li>
+
                         </ul>
+                        <div class="form-group hidden s-result" id="hidden">
+                            <input type="text" name="s" id="s" class="form-control" autocomplete="false">
+                            <div class="result hidden">
+
+                            </div>
+                        </div>
+                        <div class="form-group hidden" id="actif">
+
+                            <div>
+                                <label for="garage">Garage moto</label>
+                                <input type="checkbox"  id="garage" name="sv-g">
+                            </div>
+
+                            <div>
+                                <label for="accessory">Accessoires moto</label>
+                                <input type="checkbox"  id="accessory" name="sv-a">
+                            </div>
+
+                            <div>
+                                <label for="pieces">Pieces moto</label>
+                                <input type="checkbox"  id="pieces" name="sv-p">
+                            </div>
+
+                            <div>
+                                <label for="huile">Huile moto</label>
+                                <input type="checkbox"  id="garage" name="sv-g">
+                            </div>
+
+                            <div>
+                                <label for="tunning">Tunning</label>
+                                <input type="checkbox"  id="tunning" name="sv-per">
+                            </div>
+
+                        </div>
+                        <div class="form-group hidden" id="btn">
+                            <button class="btn btn-success">
+                                Rechercher
+                            </button>
+                        </div>
                     </form>
                 </div>
+            </div>
+            <div class="col-md-4" id="section-right">
+
                 <section class="content-fixed" id="fixedRight">
                     <?php $place = $thatPlace['place'] ?>
                     @include('absolute.loop-array',[$place])
@@ -57,27 +102,106 @@
             var height = $(window).height() - $("header-fixed").height();
             $('#group').css('max-height',height);
             $('#group').css('min-height',height);
-            $('.canvas-container').css('height',height);
             $('#canvas').css('height',height-60).css('padding-bottom',20);
         })
     </script>
     <script>
         $(function() {
-            $('input[type="radio"]').iCheck({
+            $('input[type="radio"],input[type="checkbox"]').iCheck({
                 checkboxClass: 'icheckbox_flat-blue',
                 radioClass: 'iradio_square',
                 increaseArea: '20%', // optional
             })
-            $('input[type="radio"]').on('ifChanged', function(event) {
 
-                var input = $('input[type=radio]')
+            var r = ""
 
-                for(var i in input) {
-                    if($(i).is(':checked')) {
-                        $(i).iCheck('uncheck')
+            $('input[type="radio"]').on('ifChecked', function(event) {
+
+                    var value =  event.currentTarget.getAttribute('value');
+                    r = value
+
+                    if($('#hidden').hasClass('hidden'))
+                        $('#hidden').removeClass('hidden');
+                    $('#s').attr('name','sp='+value).attr('placeholder',value);
+
+            })
+
+            $('input[type="checkbox"]').on('ifChecked', function(event) {
+
+                if($('#btn').hasClass('hidden'))
+                        $('#btn').removeClass('hidden')
+
+            })
+
+
+            var  chosen = false;
+
+            $('#s').on('keyup', function() {
+
+                chosen = false;
+
+                if( $( this ).val().length >= 3 ) {
+
+                    $.ajax({
+                        url: '{{ route('match') }}?s='+$(this).val()+'&'+$(this).attr('name')
+                    }).done(function(data) {
+
+                        if(!$('.result').hasClass('hidden'))
+                                $('.result').addClass('hidden')
+
+                        if($('span.list').length) {
+                            $('span.list').each(function() {
+                                $(this).remove()
+                            })
+                        }
+
+                        if( data.length && !chosen ) {
+
+                            if(data[0].nom == $('#s').val()) {
+                                chosen = true
+                                $('#actif').removeClass('hidden')
+
+                                return
+                            }
+
+                            var span = $(' <span> ').addClass('list').html(data[0].nom)
+
+                            $('.result').removeClass('hidden').append(span)
+
+                        }
+
+                    })
+
+                }
+
+            })
+
+            $('.result').on('click','span.list', function() {
+                $('#s').val($(this).html())
+
+                $(this).parent().addClass('hidden')
+                $(this).remove()
+                chosen = true
+                $('#actif').removeClass('hidden')
+
+            })
+
+            $('#territorySpecification').on('submit', function(e) {
+                e.preventDefault();
+
+                var url = r+'/'+$('#s').val()
+                var checked = $(this).serializeArray()
+                var checkedList = ""
+
+                for(var c = 0 ; c < checked.length ; c++) {
+                    if(c >2 ) {
+                        checkedList += "&"+checked[c].name +"="+checked[c].value
                     }
                 }
 
+                window.location.href = '/'+url+'?'+checkedList;
+
+                //app.map.reloadPageWithNewData();
             })
         })
     </script>

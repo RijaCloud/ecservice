@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\ImageToUpload;
 use App\Events\UserHasLoggedIn;
+use App\Listeners\ImageHaveBeenUpload;
 use App\Listeners\LogginSuccess;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         UserHasLoggedIn::class => [
             LogginSuccess::class,
         ],
+        ImageToUpload::class => [
+            ImageHaveBeenUpload::class,
+        ]
         
     ];
 

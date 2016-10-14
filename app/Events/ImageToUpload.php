@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Lieu;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Queue\SerializesModels;
@@ -14,16 +15,19 @@ class ImageToUpload
 {
     use InteractsWithSockets, SerializesModels;
 
-    protected $file;
+    public $file;
+    
+    public $lieu;
     
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct( UploadedFile $file )
+    public function __construct( UploadedFile $file , Lieu $lieu)
     {
         $this->file = $file;
+        $this->lieu = $lieu;
     }
 
     /**

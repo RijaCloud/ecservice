@@ -24,11 +24,11 @@ class FokontanyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required|string|not_in:fokontany',
+            'nom'=>'required|string|not_in:fokontany',
             'description'=>'',
             'longitude'=>'required|numeric',
             'latitude'=>'required|numeric',
-            'parent'=>'required|numeric|exists:commune,id'
+            'commune_id'=>'required|numeric|exists:commune,id'
         ];
     }
 }

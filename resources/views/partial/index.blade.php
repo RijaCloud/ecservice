@@ -12,12 +12,16 @@
         <h3><span class="typed" style="white-space:pre;">Trouver les lieux specialiser dans la maintenance de votre moto , <br> quelque soit votre position à Antananarivo</span></h3>
     </div>
     <div class="middle-research">
-        <form id="indexInput" action="{{ url('fokontany') }}" method="GET">
+        <form id="indexInput" action="{{ url('fokontany') }}" method="GET" autocomplete="off">
             <div class="toggle-input">
-                <div style="position:relative">
+                <div style="position:relative;float:left;    width: 46%;">
                     <input type="text" placeholder="Je recherche" name="sv" id="mys" class="aria-search">
                 </div>
                 <div class="dropdown"></div>
+
+                <div style="position:relative;float:right;    width: 46%;">
+                    <input type="text" placeholder="Fokontany" name="sf" id="mysf" class="aria-search">
+                </div>
                 <button type="submit" class="btn btn-primary"></button>
 
             </div>
@@ -37,26 +41,5 @@
 <script src="{{ asset('bower_components/jquery/dist/jquery.js') }}"></script>
 <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.js') }}"></script>
 <script src="{{ asset('js/home-search.js') }}"></script>
-<script>
-    $(document).ready(function() {
-        $('.select2').select2({
-            placeholder: "Quartier",
-            allowClear: false
-        })
-        $('#multiple').select2({
-        })
-    });
-</script>
-<script>
-    $(function() {
 
-        $('#indexInput').on('submit', function(e) {
-            e.preventDefault();
-            var select = $('#single_select').select();
-            console.log(select)
-            var url = $(this).attr('action') + '/';
-        })
-
-    });
-</script>
 @endsection

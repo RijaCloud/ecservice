@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Region extends Model
 {
@@ -11,12 +12,12 @@ class Region extends Model
 
     /**
      * The One to many Relation
-     * Dans une region on trouve plusieur commune
+     * Dans une region on trouve plusieur district
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function commune() {
+    public function district() {
 
-        return $this->hasMany(Commune::class);
+        return $this->hasMany(District::class);
 
     }
 
@@ -28,6 +29,12 @@ class Region extends Model
     public function province() {
 
         return $this->belongsTo(Province::class);
+
+    }
+    
+    public function scopeFilter($query,$match) {
+
+        return $query->where('nom','LIKE',"%$match%")->orderBy(DB::raw('RAND()'))->get();
 
     }
 

@@ -9,6 +9,16 @@
                     <p itemscope class="content-details">
                         {{ (isset($p->description)) ? $p->description : $p->lieu['description'] }}
                     </p>
+                    <div class="listicon">
+                        <ul>
+                            <li @if(!$p->garage) display="none" @endif> <img src="{{ asset('img/garage2.png') }}" alt="Garage"> </li>
+                            <li @if(!$p->personnalisation) display="none" @endif> <img src="{{ asset('img/repair.png') }}" alt="Tunning"> </li>
+                            <li @if(!$p->accessoires) display="none" @endif> <img src="{{ asset('img/repair.png') }}" alt="Vendeur Accessoires"> </li>
+                            <li @if(!$p->pieces) display="none" @endif> <img src="{{ asset('img/repair.png') }}" alt="Vendeur Pieces"> </li>
+                            <li @if(!$p->vente_moto) display="none" @endif> <img src="{{ asset('img/bike2.png') }}" alt="Vendeur Moto"> </li>
+                            <li @if(!$p->huiles) display="none" @endif> <img src="{{ asset('img/oil.png') }}" alt="Vendeur Huiles"> </li>
+                        </ul>
+                    </div>
                 </div>
             </li>
         @endforeach

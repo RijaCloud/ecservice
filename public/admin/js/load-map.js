@@ -120,9 +120,10 @@ var app  = {
             if(navigator.geolocation) {
 
                 return navigator.geolocation.getCurrentPosition(function(position) {
-                    latElement.value = position.coords.latitude
                     lngElement.value = position.coords.longitude
-                    
+                    latElement.value = position.coords.latitude
+                    app.map.carte.setCenter(new google.maps.LatLng(position.coords.latitude,position.coords.longitude))
+                    app.map.marker.setPosition(new google.maps.LatLng(position.coords.latitude,position.coords.longitude))
                     return true
                 },function(error) {
                     switch(error.code) {

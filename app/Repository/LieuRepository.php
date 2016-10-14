@@ -137,13 +137,13 @@ class LieuRepository {
         $place->longitude = $input['longitude'];
         $place->latitude = $input['latitude'];
         $place->commune_id = $input['commune'];
-        $place->departement_id = $input['departement'];
+        $place->district_id = $input['district'];
         $place->region_id = $input['region'];
         $place->province_id = $input['province'];
         $place->moto = true;
         
         if($place->save())
-            return $place->id;
+            return $place;
         
     }
 
@@ -224,21 +224,52 @@ class LieuRepository {
         return $this->model->whereNom($name)->with('lieu')->get();
         
     }
+    
+    public function allWhere($param, $specified = [] , $d = 2) {
 
-    public function allWhereFokontany($param, $specified = []) {
+        $lat = $param->latitude;
+        $lng = $param->longitude;
+        $circonference = 40000;
+        $deg = 111;
+        $distance_longitude = $circonference * cos($deg) / 360;
+
+        $latnegatif = $lat - ($d / $deg);
+        $latpositif = $lat + ($d / $deg);
+
+        $lngnegatif = $lng - ($d / $distance_longitude);
+        $lngpositif = $lng + ($d / $distance_longitude);
 
         if(count($specified) != 0) {
-            $long_query = $this->moto->where('fokontany_id',$param);
+
+            $long_query = $this->moto;
+            //->where(DB::raw('moto.fokontany_id = '.$param->id));
+
             foreach($specified as $sp) {
                 $long_query->$sp();
             }
-            return $long_query->with('lieu')->get();
-            
+
+            return $long_query
+                ->join('lieu',function($joins) use ($latnegatif,$latpositif,$lngnegatif,$lngpositif) {
+                    $joins
+                        ->on('moto.lieu_id','=','lieu.id')
+                        ->whereBetween('lieu.latitude',[$latnegatif,$latpositif])
+                        ->whereBetween('lieu.longitude',[$lngpositif,$lngnegatif]);
+                })
+                ->get();
+
         } else {
-            return  $this->moto->where("fokontany_id",$param)->with('lieu')->get();
+
+            return  $this->moto
+                ->join('lieu',function($joins) use($latnegatif,$latpositif,$lngnegatif,$lngpositif) {
+                    $joins
+                        ->on('moto.lieu_id','=','lieu.id')
+                        ->whereBetween('lieu.latitude',[$latnegatif,$latpositif])
+                        ->whereBetween('lieu.longitude',[$lngpositif,$lngnegatif]);
+                })
+                ->get();
 
         }
 
-
     }
+    
 }

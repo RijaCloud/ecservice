@@ -23,23 +23,7 @@
                         </ul>
                     </li>
                 </ul>
-                @if(!Request::is('home'))
-                <div id="header-nav" class="navbar-header navbar-left">
-                    <div>
-                        <form class="navbar-form" role="search">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search">
-                            </div>
-                            <button type="submit" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
-                            <div class="dropdown-menu item" aria-label="search-dropdown">
-                                <ul class="menu-complete">
 
-                                </ul>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                @endif
                 @if(session('role'))
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">

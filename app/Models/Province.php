@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Province extends Model
 {
@@ -22,5 +23,9 @@ class Province extends Model
         
     }
     
+    public function scopeFilter($query,$match) {
 
+        return $query->where('nom','LIKE',"%$match%")->orderBy(DB::raw('RAND()'))->get();
+
+    }
 }

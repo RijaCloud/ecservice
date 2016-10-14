@@ -3,7 +3,7 @@
     namespace App\Repository;
 
     use App\Models\Commune;
-    use App\Models\Departement;
+    use App\Models\District;
     use App\Models\Fokontany;
     use App\Models\Province;
     use App\Models\Region;
@@ -25,7 +25,7 @@
         /**
          * @var \App\Models\Departement
          * */
-        private $departement;
+        private $district;
         /**
          * @var  \App\Models\Fokontany
          * */
@@ -37,15 +37,16 @@
          * @param Province $province
          * @param Region $region
          * @param Commune $commune
-         * @param Departement $departement
+         * @param District $district
          * @param Fokontany $fokontany
+         * @internal param Departement $departement
          */
-        public function __construct(Province $province , Region $region , Commune $commune, Departement $departement , Fokontany $fokontany) {
+        public function __construct(Province $province , Region $region , Commune $commune, District $district , Fokontany $fokontany) {
 
             $this->province = $province;
             $this->region = $region;
             $this->commune = $commune;
-            $this->departement = $departement;
+            $this->district = $district;
             $this->fokontany = $fokontany;
 
         }
@@ -71,7 +72,7 @@
 
             $province = new $this->province;
 
-            $province->nom = $input['name'];
+            $province->nom = $input['nom'];
             $province->latitude = $input['latitude'];
             $province->longitude = $input['longitude'];
             $province->description = $input['description'];
@@ -87,7 +88,7 @@
          */
         public function oneProvince($id) {
             
-            return $this->province->where('id',$id)->first();
+            return $this->province->where('id',$id)->orWhere('nom',$id)->first();
             
         }
 
@@ -125,8 +126,8 @@
 
             $commune = new $this->commune;
 
-            $commune->nom = $input['name'];
-            $commune->departement_id = $input['parent'];
+            $commune->nom = $input['nom'];
+            $commune->departement_id = $input['district_id'];
             $commune->latitude = $input['latitude'];
             $commune->longitude = $input['longitude'];
             $commune->description = $input['description'];
@@ -141,7 +142,7 @@
          */
         public function oneCommune($id) {
             
-            return $this->commune->where('id',$id)->first();
+            return $this->commune->where('id',$id)->orWhere('nom',$id)->first();
             
         }
 
@@ -186,8 +187,8 @@
 
             $commune = new $this->region;
 
-            $commune->nom = $input['name'];
-            $commune->province_id = $input['parent'];
+            $commune->nom = $input['nom'];
+            $commune->province_id = $input['province_id'];
             $commune->latitude = $input['latitude'];
             $commune->longitude = $input['longitude'];
             $commune->description = $input['description'];
@@ -202,7 +203,7 @@
          */
         public function oneRegion($id) {
 
-            return $this->region->where('id',$id)->first();
+            return $this->region->where('id',$id)->orWhere('nom',$id)->first();
             
         }
 
@@ -224,27 +225,27 @@
          * @param null $limit
          * @return mixed
          */
-        public function allDepartement($limit  = null) {
+        public function allDistrict($limit  = null) {
             if($limit)
-                return $this->departement->latest()->limit($limit)->get();
+                return $this->district->latest()->limit($limit)->get();
             else
-                return $this->departement->latest()->get();
+                return $this->district->latest()->get();
         }
 
         /**
          * Store a departement
          * @param $input
          */
-        public function storeDepartement($input) {
+        public function storeDistrict($input) {
 
-            $departement = new $this->departement;
+            $district = new $this->district;
 
-            $departement->nom = $input['name'];
-            $departement->region_id = $input['parent'];
-            $departement->latitude = $input['latitude'];
-            $departement->longitude = $input['longitude'];
-            $departement->description = $input['description'];
-            $departement->save();
+            $district->nom = $input['nom'];
+            $district->region_id = $input['region_id'];
+            $district->latitude = $input['latitude'];
+            $district->longitude = $input['longitude'];
+            $district->description = $input['description'];
+            $district->save();
 
         }
 
@@ -253,9 +254,9 @@
          * @param $id
          * @return mixed
          */
-        public function oneDepartement($id) {
+        public function oneDistrict($id) {
 
-            return $this->departement->where('id',$id)->orWhere('nom',$id)->first();
+            return $this->district->where('id',$id)->orWhere('nom',$id)->first();
 
         }
 
@@ -264,11 +265,11 @@
          * @param $id
          * @param $input
          */
-        public function updateDepartement($id , $input) {
+        public function updateDistrict($id , $input) {
 
-            $departement = $this->oneDepartement($id);
+            $district = $this->oneDistrict($id);
 
-            $departement->update($input);
+            $district->update($input);
 
         }
 
@@ -292,8 +293,8 @@
             
             $fokontany = new $this->fokontany;
             
-            $fokontany->nom = $input['name'];
-            $fokontany->commune_id = $input['parent'];
+            $fokontany->nom = $input['nom'];
+            $fokontany->commune_id = $input['commune_id'];
             $fokontany->latitude = $input['latitude'];
             $fokontany->longitude = $input['longitude'];
             $fokontany->description = $input['description'];

@@ -4,7 +4,7 @@
 
 <div class="login-box">
     <div class="login-logo">
-        <a href="{{ url('/') }}"><b>EveryCycle</b>
+        <a href="{{ url('/') }}"><b>WheelsMada</b>
             <br>
             <h2>Administration</h2></a>
     </div>

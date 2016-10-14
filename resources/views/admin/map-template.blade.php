@@ -39,7 +39,7 @@
                                     <label for="name">Nom</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"></div>
-                                        <input type="text" class="form-control pull-right" name="name" id="name" placeholder="{{ $placeholder }}">
+                                        <input type="text" class="form-control pull-right" name="nom" id="name" placeholder="{{ $placeholder }}">
                                         <span class="error alert alert-danger hidden"></span>
                                     </div>
                                 </div>
@@ -58,9 +58,13 @@
                                             <label for="parent">{{ $appart }}  d'appartenence</label>
                                             <div class="input-group">
                                                 <div class="input-group-addon"></div>
-                                                <select name="parent" id="parent" class="form-control pull-left">
+                                                <?php $name = strtolower($appart)  ?>
+
+                                                <select name="{{ $name }}_id" id="parent" class="form-control pull-left">
                                                     @foreach($parent as $p)
-                                                        <option value="{{ $p->id }}">{{ $p->nom }}</option>
+
+                                                        <option value="{{ $p->id }}" >{{ $p->nom }}</option>
+
                                                     @endforeach
                                                 </select>
                                                 <span class="error alert alert-danger hidden"></span>
@@ -88,6 +92,7 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
+                            <div class="alert alert-success hidden"> Ajouter avec succés</div>
                             <button class="btn btn-sm btn-info btn-flat pull-right">Ajouter à la liste</button>
                         </div>
 
@@ -98,7 +103,7 @@
             </div>
 
             <div class="box-footer text-center">
-                Administration EveryCycle
+                Administration WheelsMada
             </div>
         </div>
 
@@ -179,22 +184,28 @@
                 var longitude = $('#longitude');
                 var latitude = $('#latitude');
                 var parent = $('#parent');
-
+                var loader = $('.img-loader');
+                var success = $('.success');
+                if(!success.hasClass('hidden'));
+                        success.addClass('hidden');
                 var error = $('.input-group span.error');
                 for(var i = 0 ; i < error.length ; i++) {
                     if(!$(error[i]).hasClass('hidden'))
                         $(error[i]).addClass('hidden')
                 }
+                loader.removeClass('hidden')
 
                 $.ajax({
                     data : $(this).serialize(),
                     method : method,
-                    action: action
+                    url: action
                 }).done(function(){
                     name.val('');
                     description.val('')
                     longitude.val('')
                     latitude.val('')
+                    loader.addClass('hidden')
+                    success.addClass('hidden')
                 }).fail(function(data) {
 
                    var error = data.responseJSON;

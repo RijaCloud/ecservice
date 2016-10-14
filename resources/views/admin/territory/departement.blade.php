@@ -6,27 +6,25 @@
 
         @include('admin.content-header', [
 
-            'title'=>'Departement',
+            'title'=>'District',
             'link'=>[
 
                 ['name'=>'Acceuil','url'=>route('admin.index')],
 
-                ['name'=>'Region']
+                ['name'=>'District']
             ]
 
         ])
+
         @include('admin.map-template', [
-            'title'=>'Departement',
-            'function'=>'Departement',
-            'action'=>action('Back\TerritoryController@createDepartement'),
-            'placeholder'=>'Departement',
+            'title'=>'District',
+            'function'=>'District',
+            'action'=>action('Back\TerritoryController@createDistrict'),
+            'placeholder'=>'District',
             'parent'=>$parent,
             'appart'=>'Region'
         ])
 
-
     </div>
 
-
-
-    @endsection
+@endsection

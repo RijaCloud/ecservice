@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Back;
 
 use App\Http\Requests\CountryRequest;
-use App\Http\Requests\DepartementRequest;
+use App\Http\Requests\DistrictRequest;
 use App\Http\Requests\FokontanyRequest;
 use App\Http\Requests\ProvinceRequest;
 use App\Http\Requests\TownRequest;
-use App\Models\Departement;
 use App\Repository\ProvinceRepository;
 use App\Repository\TerritoryRepository;
 use Illuminate\Http\Request;
@@ -58,7 +57,7 @@ class TerritoryController extends Controller
      */
     public function createCountry(CountryRequest $request) {
 
-        $this->repository->storeRegion($request->only('name','parent','description','latitude','longitude'));
+        $this->repository->storeRegion($request->except('_token'));
 
     }
 
@@ -88,7 +87,7 @@ class TerritoryController extends Controller
      */
     public function updateCountry(CountryRequest $request, $id) {
         
-        $this->repository->updateRegion($id, $request->only('name','parent','description','latitude','longitude'));
+        $this->repository->updateRegion($id, $request->except('_token'));
             
     }
     
@@ -110,7 +109,7 @@ class TerritoryController extends Controller
     public function town(Request $request) {
 
         $latest = $this->repository->allCommune();
-        $parent = $this->repository->allDepartement();
+        $parent = $this->repository->allDistrict();
         if($request->isXmlHttpRequest()) {
             return view('admin.ajaxify.territory.town',compact('latest','parent'));
         } else {
@@ -125,7 +124,7 @@ class TerritoryController extends Controller
      */
     public function createTown(TownRequest $request) {
 
-        $this->repository->storeCommune($request->only('name','latitude','parent','longitude','description'));
+        $this->repository->storeCommune($request->except('_token'));
 
     }
 
@@ -140,7 +139,7 @@ class TerritoryController extends Controller
         $id = explode('-',$id)[0];
 
         $place = $this->repository->oneCommune($id);
-        $parent = $this->repository->allDepartement();    
+        $parent = $this->repository->allDistrict();
         if($request->isXmlHttpRequest()) {
             return $place;
         } else {
@@ -155,6 +154,12 @@ class TerritoryController extends Controller
         
         return view('admin.territory.alltown',['latest'=>$data]);
         
+    }
+
+    public function updateTown($id,TownRequest $request) {
+
+        $this->repository->updateCommune($id,$request->except('_token'));
+
     }
     
     /**
@@ -182,7 +187,7 @@ class TerritoryController extends Controller
      */
     public function createProvince(ProvinceRequest $request) {
 
-        $this->repository->storeProvince($request->only('name','description','latitude','longitude'));
+        $this->repository->storeProvince($request->except('_token'));
         
     }
 
@@ -214,7 +219,14 @@ class TerritoryController extends Controller
         return view('admin.territory.allprovince',['latest'=>$data ]);
         
     }
-    
+
+    public function updateProvince($id,ProvinceRequest $request) {
+
+        $this->repository->updateProvince($id,$request->except('_token'));
+
+    }
+
+
     public function state() {
 
         return view('admin.territory.state');
@@ -244,7 +256,7 @@ class TerritoryController extends Controller
      */
     public function createFokontany(FokontanyRequest $request){
         
-        $this->repository->storeFokontany($request->only('name','description','parent','latitude','longitude'));
+        $this->repository->storeFokontany($request->except('_token'));
         
     }
     
@@ -258,6 +270,7 @@ class TerritoryController extends Controller
         $id = explode('-',$id)[0];
 
         $place = $this->repository->oneFokontany($id);
+
         $parent = $this->repository->allCommune();
         if($request->isXmlHttpRequest()) {
             return $place;
@@ -275,14 +288,21 @@ class TerritoryController extends Controller
         
         
     }
-    
+
+    public function updateFokontany($id,FokontanyRequest $request) {
+
+        $this->repository->updateFokontany($id,$request->except('_token'));
+
+    }
+
+
     /**
      * @param Request $request
      * @return mixed
      */
-    public function departement(Request $request) {
+    public function district(Request $request) {
 
-        $latest = $this->repository->allDepartement();
+        $latest = $this->repository->allDistrict();
         $parent = $this->repository->allRegion();
 
         if($request->isXmlHttpRequest()) {
@@ -291,15 +311,15 @@ class TerritoryController extends Controller
             return view('admin.territory.departement',compact('latest','parent'));
         }
 
-
     }
 
-    /**
-     * @param DepartementRequest $request
-     */
-    public function createDepartement(DepartementRequest $request) {
 
-        $this->repository->storeDepartement($request->only('name','parent','description','latitude','longitude'));
+    /**
+     * @param DistrictRequest $request
+     */
+    public function createDistrict(DistrictRequest $request) {
+
+        $this->repository->storeDistrict($request->except('_token'));
     
     }
 
@@ -309,10 +329,10 @@ class TerritoryController extends Controller
      * @param $id
      * @return mixed
      */
-    public function readDepartement(Request $request, $id) {
+    public function readDistrict(Request $request, $id) {
         $id = explode('-',$id)[0];
 
-        $place = $this->repository->oneDepartement($id);
+        $place = $this->repository->oneDistrict($id);
         $parent = $this->repository->allRegion();
         if($request->isXmlHttpRequest()) {
             return $place;
@@ -322,12 +342,20 @@ class TerritoryController extends Controller
 
     }
 
-    public function allDepartement() {
+    public function allDistrict() {
         
-        $data = $this->repository->allDepartement();
+        $data = $this->repository->allDistrict();
         
         return view ('admin.territory.alldepartement',['latest'=>$data]);
         
         
     }
+
+    public function updateDistrict($id,DistrictRequest $request) {
+
+        $this->repository->updateDistrict($id,$request->except('_token'));
+
+    }
+
+
 }

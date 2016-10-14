@@ -24,8 +24,8 @@ class TownRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|not_in:commune',
-            'parent' => 'required|numeric|exists:departement,id',
+            'nom' => 'required|not_in:commune',
+            'district_id' => 'required|numeric|exists:district,id',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'description' => ''

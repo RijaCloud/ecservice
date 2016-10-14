@@ -1,9 +1,10 @@
+
 <section class="content">
     <div class="row">
         <div class="col-md-8">
             <div class="box box-default">
                 <div class="box-header box-with-border">
-                    <h3 class="box-title">EveryCycle</h3>
+                    <h3 class="box-title">WheelsMada</h3>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -33,7 +34,7 @@
                             @foreach($latest as $last)
 
                                 <?php
-                                $link = Route::current()->getName() == 'territory.allPlace' ? route('territory.readPlace',['id'=>$last->id.'-'.$last->nom]) : route('territory.read'.ucfirst($title) , ['id'=>$last->id.'-'.$last->nom])
+                                $link = Route::current()->getName() == 'territory.allPlace' ? route('territory.readPlace',['id'=>$last->id.'-'. str_replace(' ','-',$last->string_lieu) ]) : route('territory.read'.ucfirst($title) , ['id'=>$last->id.'-'.$last->nom])
                                 ?>
 
                                 <tr style="cursor:pointer;" data-link="{{ $link }}" data-delete="{{ route('territory.deletePlace',['id'=>$last->id]) }}" class="to-map">
@@ -61,30 +62,7 @@
 
                 </div>
                 <div class="box-footer text-center">
-                    Administration EveryCycle
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="box box-default">
-                <div class="box-header box-with-border">
-                    <h3 class="box-title">EveryCycle</h3>
-
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                    </div>
-
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div id="canvas" style="height:400px;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="box-footer text-center">
-                    Administration EveryCycle
+                    Administration WheelsMada
                 </div>
             </div>
             <div class="box box-default">
@@ -105,7 +83,8 @@
                                 {{ csrf_field() }}
                                 <button class="btn btn-warning" id="delete">Supprimer</button>
                             </form>
-
+                        </div>
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label for="map-latitude">Nom</label>
                                 <input type="text" class="form-control" value="" id="map-name" disabled>
@@ -126,9 +105,33 @@
                     </div>
                 </div>
                 <div class="box-footer text-center">
-                    Administration EveryCycle
+                    Administration WheelsMada
                 </div>
             </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box box-default">
+                <div class="box-header box-with-border">
+                    <h3 class="box-title">WheelsMada</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="canvas" style="height:400px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer text-center">
+                    Administration WheelsMada
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -143,6 +146,7 @@
     for(var i = 0 ; i < tomap.length ; i++) {
         tomap[i].addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             load.classList.remove('hidden')
             app.map.findMapAndReloadMarkers(this.getAttribute('data-link'),this.getAttribute('data-delete'));
         })

@@ -9,7 +9,9 @@ class Moto extends Model
 {
     protected $table = "moto";
 
-    protected $fillable = ['lieu_id','garage','personnalisation','huiles','accessoires','pieces','vente_moto'];
+    protected $guarded = ['created_at','updated_at'];
+
+    public $timestamps = false;
 
     /**
      * Retourne les lieux qui sont des garages

@@ -25,7 +25,7 @@ class CountryRequest extends FormRequest
     {
         return [
             "name" => "required|not_in:region",
-            "parent" => "required|numeric|exists:province,id",
+            "province_id" => "required|numeric|exists:province,id",
             "latitude" => "required|numeric",
             "longitude" => "required|numeric",
             "description" => "",

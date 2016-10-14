@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Commune extends Model
 {
 
     protected $table = "commune";
+
+    protected $guarded = [];
 
     public $timestamps = false;
     
@@ -27,10 +30,16 @@ class Commune extends Model
      * Dasn une region on peut trouver plusieur commune
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function departement() {
+    public function district() {
         
-        return $this->belongsTo(Departement::class);
+        return $this->belongsTo(District::class);
         
     }
-    
+
+    public function scopeFilter($query,$match) {
+
+        return $query->where('nom','LIKE',"$match%")->orderBy(DB::raw('RAND()'))->get();
+
+    }
+
 }

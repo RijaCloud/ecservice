@@ -9,10 +9,11 @@ class Lieu extends Model
 {
     protected $table = "lieu";
 
-    protected $fillable = ['string_lieu','latitude','longitude','description','image','telephone','address','image'];
+    protected $guarded = [];
 
     protected $hidden = ['created_at','updated_at','fokontany_id'];
-    
+
+    public $timestamps = true;
     /**
      * The One to Many Relation
      * Plusieurs lieux consacrer aux motos appartienent à une commune

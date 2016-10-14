@@ -1,3 +1,70 @@
+/* Polyfill  for forEach*/
+// ECMA-262, Edition 5, 15.4.4.18
+// Référence: http://es5.github.io/#x15.4.4.18
+if (!Array.prototype.forEach) {
+
+    Array.prototype.forEach = function(callback, thisArg) {
+
+        var T, k;
+
+        if (this === null) {
+            throw new TypeError(' this vaut null ou n est pas défini');
+        }
+
+        // 1. Soit O le résultat de l'appel à ToObject
+        //    auquel on a passé |this| en argument.
+        var O = Object(this);
+
+        // 2. Soit lenValue le résultat de l'appel de la méthode
+        //    interne Get sur O avec l'argument "length".
+        // 3. Soit len la valeur ToUint32(lenValue).
+        var len = O.length >>> 0;
+
+        // 4. Si IsCallable(callback) est false, on lève une TypeError.
+        // Voir : http://es5.github.com/#x9.11
+        if (typeof callback !== "function") {
+            throw new TypeError(callback + ' n est pas une fonction');
+        }
+
+        // 5. Si thisArg a été fourni, soit T ce thisArg ;
+        //    sinon soit T égal à undefined.
+        if (arguments.length > 1) {
+            T = thisArg;
+        }
+
+        // 6. Soit k égal à 0
+        k = 0;
+
+        // 7. On répète tant que k < len
+        while (k < len) {
+
+            var kValue;
+
+            // a. Soit Pk égal ToString(k).
+            //   (implicite pour l'opérande gauche de in)
+            // b. Soit kPresent le résultat de l'appel de la
+            //    méthode interne HasProperty de O avec l'argument Pk.
+            //    Cette étape peut être combinée avec c
+            // c. Si kPresent vaut true, alors
+            if (k in O) {
+
+                // i. Soit kValue le résultat de l'appel de la
+                //    méthode interne Get de O avec l'argument Pk.
+                kValue = O[k];
+
+                // ii. On appelle la méthode interne Call de callback
+                //     avec T comme valeur this et la liste des arguments
+                //     qui contient kValue, k, et O.
+                callback.call(T, kValue, k, O);
+            }
+            // d. On augmente k de 1.
+            k++;
+        }
+        // 8. on renvoie undefined
+    };
+}
+
+/*  End */
 
 var app  = {
 
@@ -149,11 +216,7 @@ var app  = {
                     app.map.carte.setCenter({lat:latitude,lng:longitude});
                     app.map.reloadMarkers([latitude,longitude]);
 
-                } else {
-
-
-                }
-
+                } 
             }
             http.send()
         
@@ -182,7 +245,34 @@ var app  = {
                 },
                 draggable: false
             })
-            
+
+
+            var image = {
+                url: window.location.origin+'/img/map-marker.png',
+                size: new google.maps.Size(32,32),
+                origin: new google.maps.Point(0,0),
+                anchor: new google.maps.Point(0, 32)
+            }
+
+            var image_flag = {
+                url: window.location.origin+'/img/flag-map-marker.png',
+                size: new google.maps.Size(32,32),
+                origin: new google.maps.Point(0,0),
+                anchor: new google.maps.Point(0, 32)
+            }
+
+            var shape = {
+                coords: [1, 1, 1, 20, 18, 20, 18, 1],
+                type: 'poly'
+            };
+
+            app.map.marker['map'] = new google.maps.Marker({
+                map : app.map.carte,
+                position: coords,
+                icon: image_flag,
+                shape : shape
+            })
+
             for(var e = 0 ; e < element.length ; e++) {
 
                 var latitude = element[e].getAttribute('data-lat')
@@ -194,7 +284,9 @@ var app  = {
                 app.map.marker['map'+id] = new google.maps.Marker({
                     map : app.map.carte,
                     position: latLng,
-                    html: marker_name
+                    html: marker_name,
+                    icon: image,
+                    shape : shape
                 })
                 
                 app.map.popup['map'+id] = new google.maps.InfoWindow()
@@ -210,15 +302,12 @@ var app  = {
 
                 app.map.popup['map'+id].setPosition(new google.maps.LatLng(latitude,longitude))
 
-                var i = e;
-
                 google.maps.event.addListener(app.map.marker['map'+id], 'click', function() {
 
                     app.map.popup['map'+id].open(this.getMap(),this)
 
                 })
             }
-            console.log(app.map.popup);
 
             document.querySelectorAll('.marked').forEach(function(dx,el) {
 
@@ -239,7 +328,6 @@ var app  = {
             })
 
         }
-
     }
 
 }

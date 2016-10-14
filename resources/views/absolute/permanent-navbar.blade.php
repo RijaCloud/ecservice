@@ -5,6 +5,9 @@
                 <div class="logo">
                     <a href="/" id="logo">EveryCycle</a>
                 </div>
+            </div>
+            <div class="rightNav" id="navRight">
+
                 <div class="area-input">
                     <form action="/search" method="get" id="search">
                         <div class="inputSearch inputWithDropdown">
@@ -24,11 +27,6 @@
                         </button>
                     </form>
                 </div>
-            </div>
-            <div class="rightNav" id="navRight">
-                <ul class="right-perform">
-                    <li><a href="#" class="perform">Recherche avancée</a></li>
-                </ul>
             </div>
         </div>
     </div>

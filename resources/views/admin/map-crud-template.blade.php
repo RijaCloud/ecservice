@@ -37,7 +37,7 @@
                                 <label for="name">Nom</label>
                                 <div class="input-group">
                                     <div class="input-group-addon"></div>
-                                    <input type="text" class="form-control pull-right" name="name" value="{{ $value->nom }}" id="name" placeholder="{{ $placeholder }}">
+                                    <input type="text" class="form-control pull-right" name="nom" value="{{ $value->nom }}" id="name" placeholder="{{ $placeholder }}">
                                     <span class="error alert alert-danger hidden"></span>
                                 </div>
                             </div>
@@ -56,7 +56,9 @@
                                     <label for="parent">{{ $appart }}  d'appartenence</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"></div>
-                                        <select name="parent" id="parent" class="form-control pull-left">
+                                        <?php $name = strtolower($appart)  ?>
+
+                                        <select name="{{ $name }}_id" id="parent" class="form-control pull-left">
                                             @foreach($parent as $p)
 
                                                 <option value="{{ $p->id }}" @if($p->id == $pl) selected="selected" @endif>{{ $p->nom }}</option>
@@ -89,6 +91,8 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
+                        <div class="alert alert-success success hidden"> Action succés</div>
+
                         <button class="btn btn-sm btn-info btn-flat pull-right">Enregistrer</button>
                     </div>
 
@@ -99,7 +103,7 @@
         </div>
 
         <div class="box-footer text-center">
-            Administration EveryCycle
+            Administration WheelsMada
         </div>
 
         <div id="coord" data-lat="{{ $value->latitude }}" data-lng="{{ $value->longitude }}"></div>
@@ -130,6 +134,10 @@
                     var latitude = $('#latitude');
                     var parent = $('#parent');
                     var loader = $('.img-loader');
+                    var success = $('.success');
+                    if(!success.hasClass('hidden'));
+                        success.addClass('hidden');
+
                     var error = $('.input-group span.error');
                     for(var i = 0 ; i < error.length ; i++) {
                         if(!$(error[i]).hasClass('hidden'))
@@ -139,13 +147,10 @@
                     $.ajax({
                         data : $(this).serialize(),
                         method : method,
-                        action: action
+                        url: action
                     }).done(function(){
-                        name.val('');
-                        description.val('')
-                        longitude.val('')
-                        latitude.val('')
                         loader.addClass('hidden')
+                        success.removeClass('hidden')
                     }).fail(function(data) {
 
                         var error = data.responseJSON;
