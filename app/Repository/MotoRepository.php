@@ -12,7 +12,7 @@
 
         }
 
-        public function store($id, $input) {
+        public function store($id, $input,$input2) {
 
             $moto = new $this->model;
             $moto->lieu_id = $id;
@@ -26,6 +26,8 @@
             $moto->district_id = $input['district'];
             $moto->region_id = $input['region'];
             $moto->province_id = $input['province'];
+            $moto->latitude = $input2['latitude'];
+            $moto->longitude = $input2['longitude'];
             $moto->vente_moto = (array_key_exists('vente_moto',$input)) ? true : false;
             $moto->save();
             
@@ -48,16 +50,14 @@
             $moto = $this->getPlaceById($id);
 
             $input = collect($input);
-            $input->forget(['name','description','longitude','latitude']);
-            $input->put('fokontany_id',(int)$input->get('fokontany'));
-            $input->forget('fokontany');
-            $garage = $input->has('garage');
-            $accessoires = $input->has('accessoires');
-            $huiles = $input->has('huiles');
-            $pieces = $input->has('pieces');
-            $input->merge(['garage'=>$garage,'accessoires'=>$accessoires,'huiles'=>$huiles,'pieces'=>$pieces]);
+            $moto->garage = $input->has('garage') ? true : false;
+            $moto->accessoires = $input->has('accessoires') ? true : false;
+            $moto->huiles = $input->has('huiles') ? true : false;
+            $moto->pieces = $input->has('pieces') ? true : false;
+            $moto->personnalisation = $input->has('personnalisation') ? true : false;
+            $moto->vente_moto = $input->has('vente_moto') ? true : false;
 
-            $moto->update((array)$input);
+            $moto->update();
 
         }
     }

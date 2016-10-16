@@ -1,7 +1,12 @@
 @extends('template.template')
 
+@section('title')
+    WheelsMada | Site de géo-localisation
+@endsection
+
 @section('head')
-    <link rel="stylesheet" href="{{ asset('js/select2/dist/css/select2.css') }}">
+    <meta name="description" content="Trouver les lieux spécialiser dans la maintenance, l'entretient et la personnalisation de votre moto à Antananarivo" >
+
 @endsection
 
 @section('content')
@@ -23,7 +28,6 @@
                     <input type="text" placeholder="Fokontany" name="sf" id="mysf" class="aria-search">
                 </div>
                 <button type="submit" class="btn btn-primary"></button>
-
             </div>
 
             <div class="clearfix"></div>

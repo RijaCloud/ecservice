@@ -1,9 +1,11 @@
 
 @extends('template.template')
 
-@section('title') Pieces Moto | EveryCycle @endsection
+@section('title') Moto | EveryCycle @endsection
 
 @section('head')
+    <meta name="robots" content="dofollow,doindex">
+    <meta name="description" content="Trouver les lieux spécialiser dans la maintenance, l'entretient et la personnalisation de votre moto à Antananarivo" >
     <link rel="stylesheet" href="{{ asset('js/iCheck/skins/all.css') }}">
     <script src="{{ asset('js/iCheck/icheck.js') }}"></script>
 @endsection
@@ -28,7 +30,7 @@
                     <span class="top-content">
                         Recherche avancée :
                     </span>
-                    <form action="/"  method="get" id="territorySpecification" class="territory-display">
+                    <form action="/"  autocomplete="off" method="get" id="territorySpecification" class="territory-display">
                         <label for="display">Par:</label>
                         <ul id="display" class="display-t">
                             <li><input type="radio" id="input-1"  name="input" value="fokontany">Fokontany</li>
@@ -37,7 +39,7 @@
 
                         </ul>
                         <div class="form-group hidden s-result" id="hidden">
-                            <input type="text" name="s" id="s" class="form-control" autocomplete="false">
+                            <input type="text" name="s" id="s" class="form-control" autocomplete="off">
                             <div class="result hidden">
 
                             </div>
@@ -45,28 +47,33 @@
                         <div class="form-group hidden" id="actif">
 
                             <div>
+
+                                <input type="checkbox"  id="garage" name="sv-g">
                                 <label for="garage">Garage moto</label>
-                                <input type="checkbox"  id="garage" name="sv-g">
                             </div>
 
                             <div>
-                                <label for="accessory">Accessoires moto</label>
+
                                 <input type="checkbox"  id="accessory" name="sv-a">
+                                <label for="accessory">Accessoires moto</label>
                             </div>
 
                             <div>
-                                <label for="pieces">Pieces moto</label>
+
                                 <input type="checkbox"  id="pieces" name="sv-p">
+                                <label for="pieces">Pieces moto</label>
                             </div>
 
                             <div>
+
+                                <input type="checkbox"  id="huile" name="sv-h">
                                 <label for="huile">Huile moto</label>
-                                <input type="checkbox"  id="garage" name="sv-g">
                             </div>
 
                             <div>
-                                <label for="tunning">Tunning</label>
-                                <input type="checkbox"  id="tunning" name="sv-per">
+
+                                <input type="checkbox"  id="tuning" name="sv-per">
+                                <label for="tuning">Tuning</label>
                             </div>
 
                         </div>
@@ -156,13 +163,17 @@
                         }
 
                         if( data.length && !chosen ) {
+                            for(var d in data) {
 
-                            if(data[0].nom == $('#s').val()) {
-                                chosen = true
-                                $('#actif').removeClass('hidden')
+                                if(d.nom == $('#s').val()) {
+                                    chosen = true
+                                    $('#actif').removeClass('hidden')
 
-                                return
+                                    return
+                                }
+
                             }
+
 
                             var span = $(' <span> ').addClass('list').html(data[0].nom)
 
@@ -194,7 +205,7 @@
                 var checkedList = ""
 
                 for(var c = 0 ; c < checked.length ; c++) {
-                    if(c >2 ) {
+                    if(c >=2 ) {
                         checkedList += "&"+checked[c].name +"="+checked[c].value
                     }
                 }

@@ -1,3 +1,4 @@
+
 /* Polyfill  for forEach*/
 // ECMA-262, Edition 5, 15.4.4.18
 // Référence: http://es5.github.io/#x15.4.4.18
@@ -64,7 +65,13 @@ if (!Array.prototype.forEach) {
     };
 }
 
+String.prototype.replaceAt=function(index, character) {
+    return this.substr(0, index) + character + this.substr(index+character.length);
+}
+
+
 /*  End */
+
 
 var app  = {
 
@@ -75,6 +82,8 @@ var app  = {
         searchbox : [],
         popup : [],
         icon : [],
+        element: "",
+        marker_name: [],
         getZoom : function() {
 
             let url = window.location.href.split('/') ;
@@ -116,7 +125,7 @@ var app  = {
         initMap : function(element, param = null)  {
 
             var pos = (param !== null) ? {lat:param.lat,lng:param.lng} : {lat: -18.9149, lng: 47.5316};
-            
+            app.map.element = element;
             var search = {};
 
             app.map.carte = new google.maps.Map(element, {
@@ -125,6 +134,9 @@ var app  = {
                 mapTypeId : google.maps.MapTypeId.HYBRID,
 
             });
+
+            app.addCustomControll()
+
 
             app.map.marker = new google.maps.Marker({
                 position: pos ,
@@ -148,13 +160,15 @@ var app  = {
             });
 
         },
-        localize : function(latElement, lngElement) {
+        localize : function() {
 
             if(navigator.geolocation) {
 
                 return navigator.geolocation.getCurrentPosition(function(position) {
-                    latElement.value = position.coords.latitude
-                    lngElement.value = position.coords.longitude
+
+                    var url = window.location.origin + '/localizeMe?lat='+position.coords.latitude+'&lng='+position.coords.longitude
+
+                    window.location.href = url
 
                     return true
                 },function(error) {
@@ -224,7 +238,7 @@ var app  = {
         getDataMarkerAndLoadMap : function(element, param = {}){
 
             var coords = {lat: -18.9149, lng: 47.5316}
-
+            app.map.element = element
             if(param) {
                 coords = new google.maps.LatLng(param.center.lat,param.center.lng)
             }
@@ -246,6 +260,7 @@ var app  = {
                 draggable: false
             })
 
+            app.addCustomControll()
 
             var image = {
                 url: window.location.origin+'/img/map-marker.png',
@@ -277,36 +292,41 @@ var app  = {
 
                 var latitude = element[e].getAttribute('data-lat')
                 var longitude = element[e].getAttribute('data-lng')
-                var marker_name = element[e].getAttribute('data-name')
                 var id = element[e].getAttribute('data-id')
+                var marker_name = element[e].getAttribute('data-name')
                 var latLng = new google.maps.LatLng(latitude,longitude)
 
-                app.map.marker['map'+id] = new google.maps.Marker({
-                    map : app.map.carte,
-                    position: latLng,
-                    html: marker_name,
-                    icon: image,
-                    shape : shape
-                })
-                
-                app.map.popup['map'+id] = new google.maps.InfoWindow()
-
-                var popup = '<div id="content">'+
+                app.map.marker_name['map'+id] = '<div id="content">'+
                     '<span class="pan" style="color:black!important;">'+
                     marker_name
                     +
                     '</span>'+
                     '</div>';
 
-                app.map.popup['map'+id].setContent(popup)
+
+
+                app.map.marker['map'+id] = new google.maps.Marker({
+                    map : app.map.carte,
+                    position: latLng,
+                    html: app.map.marker_name['map'+id],
+                    icon: image,
+                    shape : shape
+                })
+                
+                app.map.popup['map'+id] = new google.maps.InfoWindow()
+
+                app.map.popup['map'+id].setContent(app.map.marker_name['map'+id])
 
                 app.map.popup['map'+id].setPosition(new google.maps.LatLng(latitude,longitude))
 
-                google.maps.event.addListener(app.map.marker['map'+id], 'click', function() {
+                google.maps.event.addListener(app.map.marker['map'+id], 'mouseover', function() {
+
+                    app.map.popup['map'+id].setContent(this.html)
 
                     app.map.popup['map'+id].open(this.getMap(),this)
 
                 })
+
             }
 
             document.querySelectorAll('.marked').forEach(function(dx,el) {
@@ -328,6 +348,53 @@ var app  = {
             })
 
         }
+    },
+    addCustomControll : function() {
+
+        var goLocalize = document.createElement('div')
+        goLocalize.id = "goLocalize"
+        goLocalize.title = "Me localisé"
+        goLocalize.index = 1
+        goLocalize.style.cursor = "pointer"
+
+        var img = document.createElement('img')
+        img.src = window.location.origin+"/img/user-location.png"
+        img.title = "Me localisé"
+
+        goLocalize.appendChild(img)
+
+        goLocalize.addEventListener('click', function() {
+
+            app.map.localize()
+
+        })
+/*
+        var goDistance = document.createElement('div')
+        goLocalize.id = "distance"
+        goLocalize.title = "Pour étendre le perimetre de résultat"
+        var input = document.createElement('input')
+        input.type = "number"
+        input.name = "points"
+        input.min = "0"
+        input.max = "50"
+        input.step = "3"
+        input.value = "5"
+        input.style.fontSize = "16px"
+
+        goDistance.appendChild(input)
+
+        input.addEventListener('change', function() {
+
+            var url = window.location.search
+            var string =  url.replaceAt(-1,this.value)
+            window.location.href = string
+
+        })
+ app.map.carte.controls[google.maps.ControlPosition.TOP_RIGHT].push(goDistance)
+
+*/
+        app.map.carte.controls[google.maps.ControlPosition.TOP_RIGHT].push(goLocalize)
+
     }
 
 }

@@ -18,7 +18,7 @@
                 <div class="col-md-12">
                     <div class="box box-default">
                         <div class="box-header box-with-border">
-                            <h3 class="box-title">EveryCycle</h3>
+                            <h3 class="box-title">WheelsMada</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -88,7 +88,14 @@
                                         <span class="error alert alert-danger hidden"></span>
                                     </div>
                                 </div>
+
                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                    <label for="latitude">Image</label>
+                                    <input type="file" class="form-control" name="image" id="image">
+
+                                </div>
+
                                     <div class="form-group">
                                         <label for="fokontany">Fokontany de : </label>
                                         <select class="form-control select2" name="fokontany" id="fokontany">
@@ -170,19 +177,55 @@
     <script>
         $(function() {
 
+            var file ;
+
+            $('input[type=file]').on('change',function(e) {
+                file = e.target.files;
+            })
+
             $('#place').on('submit', function(e) {
 
                 e.preventDefault();
 
-                var loader = $('.img-loader');
+                var name = $('#name');
+                var description = $('#description');
+                var longitude = $('#longitude');
+                var latitude = $('#latitude');
+
                 var error = $('.input-group span.error');
                 for(var i = 0 ; i < error.length ; i++) {
                     if(!$(error[i]).hasClass('hidden'))
                         $(error[i]).addClass('hidden')
+
                 }
-                    loader.removeClass('hidden')
-                $.ajax({data:$(this).serialize(),url:$(this).attr('action'),method:$(this).attr('method')}).done(function() {
-                    loader.addClass('hidden')
+
+                var data = new FormData();
+
+                if(file) {
+                       data.append("file",file[0]);
+                }
+
+                var box = $('input[type=checkbox]:checked');
+                box.each(function() {
+                    data.append($(this).attr('name'),$(this).attr('value'));
+                })
+                data.append('name',name.val())
+                data.append('description',description.val())
+                data.append('longitude',longitude.val())
+                data.append('latitude',latitude.val())
+                data.append('fokontany',$('#fokontany').val())
+                data.append('_token',$('input[type=hidden]').val())
+
+
+                $.ajax({
+                    data:data,
+                    url:$(this).attr('action'),
+                    method:$(this).attr('method'),
+                    cache: false,
+                    processData: false,
+                    contentType: false
+                }).done(function() {
+                    
                 }).fail(function(data) {
                     var error = data.responseJSON;
 
@@ -191,7 +234,6 @@
                         $("#"+e).next('span.error').removeClass('hidden').text(error[e][0]);
 
                     }
-                    loader.addClass('hidden')
                 })
 
             });

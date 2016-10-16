@@ -20,7 +20,7 @@ class Moto extends Model
      */
     public function scopeGarage($query) {
 
-        return $query->where('garage',true);
+        return $query->where($this->table.'.garage',true);
 
     }
 
@@ -31,7 +31,7 @@ class Moto extends Model
      */
     public function scopePieces($query) {
 
-        return $query->where('pieces',true);
+        return $query->where($this->table.'.pieces',true);
 
     }
 
@@ -42,7 +42,7 @@ class Moto extends Model
      */
     public function scopeAccessoires($query) {
 
-        return $query->where('accessoires',true);
+        return $query->where($this->table.'.accessoires',true);
 
     }
 
@@ -53,7 +53,7 @@ class Moto extends Model
      */
     public function scopeMoto($query) {
 
-        return $query->where('vente_moto',true);
+        return $query->where($this->table.'.vente_moto',true);
 
     }
 
@@ -64,7 +64,7 @@ class Moto extends Model
      */
     public function scopePersonnalisation($query) {
 
-        return $query->where('personnalisation',true);
+        return $query->where($this->table.'.personnalisation',true);
 
     }
 
@@ -75,7 +75,7 @@ class Moto extends Model
      */
     public function scopeHuiles($query) {
 
-        return $query->where('huiles',true);
+        return $query->where($this->table.'.huiles',true);
 
     }
 

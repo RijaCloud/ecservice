@@ -41,62 +41,14 @@ class FrontController extends Controller
         if(!is_null($name)) {
 
             $search = $this->repository->oneFokontany($name);
-            
-            $thatPlace = [];
-            if(!$search) {
-                $thatPlace = ['place'=>$thatPlace];
-
-                return view('partial.services',compact('thatPlace'));
-
-            }
-
-            $specified_query = [];
-
-            if($request->has('sv')) {
-                
-                array_push($specified_query,strtolower($request->get('sv')));
-                
-            } else {
-
-                if($request->has('sv-h'))
-                    array_push($specified_query,'huiles');
-                if($request->has('sv-acces'))
-                    array_push($specified_query,'accessoires');
-                if($request->has('sv-g'))
-                    array_push($specified_query,'garage');
-                if($request->has('sv-p'))
-                    array_push($specified_query,'pieces');
-                if($request->has('sv-m'))
-                    array_push($specified_query,'vente_moto');
-                if($request->has('sv-per'))
-                    array_push($specified_query,'personnalisation');
-
-            }
-            
-            $thatPlace = $this->lieux->allWhere($search,$specified_query,2);
-
-            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
-                'lat' => $search->latitude,
-                'lng' => $search->longitude
-            ]]);
-
-            return view('partial.services',compact('thatPlace'));
 
         } else {
 
             $search = $this->repository->oneFokontany("ANTANIMALALAKA ANALAKELY");
 
-            $thatPlace = $this->lieux->allWhere($search,[],2);
-
-            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
-                'lat' => $search->latitude,
-                'lng' => $search->longitude
-            ]]);
-
-            return view('partial.services',compact('thatPlace'));
-
         }
 
+        return $this->loadResult($search,$request,'fokontany');
     }
 
 
@@ -111,61 +63,13 @@ class FrontController extends Controller
 
             $search = $this->repository->oneCommune($name);
 
-            $thatPlace = [];
-            if(!$search) {
-                $thatPlace = ['place'=>$thatPlace];
-
-                return view('partial.services',compact('thatPlace'));
-
-            }
-
-            $specified_query = [];
-
-            if($request->has('sv')) {
-
-                array_push($specified_query,strtolower($request->get('sv')));
-
-            } else {
-
-                if($request->has('sv-h'))
-                    array_push($specified_query,'huiles');
-                if($request->has('sv-acces'))
-                    array_push($specified_query,'accessoires');
-                if($request->has('sv-g'))
-                    array_push($specified_query,'garage');
-                if($request->has('sv-p'))
-                    array_push($specified_query,'pieces');
-                if($request->has('sv-m'))
-                    array_push($specified_query,'vente_moto');
-                if($request->has('sv-per'))
-                    array_push($specified_query,'personnalisation');
-
-            }
-
-            $thatPlace = $this->lieux->allWhere($search,$specified_query,5);
-
-            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
-                'lat' => $search->latitude,
-                'lng' => $search->longitude
-            ]]);
-
-            return view('partial.services',compact('thatPlace'));
-
         } else {
 
             $search = $this->repository->oneCommune("1er Arrondissement");
 
-            $thatPlace = $this->lieux->allWhere($search,[],5);
-
-            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
-                'lat' => $search->latitude,
-                'lng' => $search->longitude
-            ]]);
-
-            return view('partial.services',compact('thatPlace'));
-
         }
 
+        return $this->loadResult($search,$request,'commune');
     }
 
     /**
@@ -179,62 +83,13 @@ class FrontController extends Controller
 
             $search = $this->repository->oneRegion($name);
 
-            $thatPlace = [];
-
-            if(!$search) {
-                $thatPlace = ['place'=>$thatPlace];
-
-                return view('partial.services',compact('thatPlace'));
-
-            }
-
-            $specified_query = [];
-
-            if($request->has('sv')) {
-
-                array_push($specified_query,strtolower($request->get('sv')));
-
-            } else {
-
-                if($request->has('sv-h'))
-                    array_push($specified_query,'huiles');
-                if($request->has('sv-acces'))
-                    array_push($specified_query,'accessoires');
-                if($request->has('sv-g'))
-                    array_push($specified_query,'garage');
-                if($request->has('sv-p'))
-                    array_push($specified_query,'pieces');
-                if($request->has('sv-m'))
-                    array_push($specified_query,'vente_moto');
-                if($request->has('sv-per'))
-                    array_push($specified_query,'personnalisation');
-
-            }
-
-            $thatPlace = $this->lieux->allWhere($search,$specified_query,50);
-
-            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
-                'lat' => $search->latitude,
-                'lng' => $search->longitude
-            ]]);
-
-            return view('partial.services',compact('thatPlace'));
-
         } else {
 
             $search = $this->repository->oneRegion("Analamanga");
 
-            $thatPlace = $this->lieux->allWhere($search,50);
-
-            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
-                'lat' => $search->latitude,
-                'lng' => $search->longitude
-            ]]);
-
-            return view('partial.services',compact('thatPlace'));
-
         }
 
+        return $this->loadResult($search,$request,'region');
     }
 
 
@@ -246,64 +101,14 @@ class FrontController extends Controller
     public function district(Request $request,$name = null) {
 
         if(!is_null($name)) {
-
             $search = $this->repository->oneDistrict($name);
 
-            $thatPlace = [];
-
-            if(!$search) {
-                $thatPlace = ['place'=>$thatPlace];
-
-                return view('partial.services',compact('thatPlace'));
-
-            }
-
-            $specified_query = [];
-
-            if($request->has('sv')) {
-
-                array_push($specified_query,strtolower($request->get('sv')));
-
-            } else {
-
-                if($request->has('sv-h'))
-                    array_push($specified_query,'huiles');
-                if($request->has('sv-acces'))
-                    array_push($specified_query,'accessoires');
-                if($request->has('sv-g'))
-                    array_push($specified_query,'garage');
-                if($request->has('sv-p'))
-                    array_push($specified_query,'pieces');
-                if($request->has('sv-m'))
-                    array_push($specified_query,'vente_moto');
-                if($request->has('sv-per'))
-                    array_push($specified_query,'personnalisation');
-
-            }
-
-            $thatPlace = $this->lieux->allWhere($search,$specified_query,15);
-
-            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
-                'lat' => $search->latitude,
-                'lng' => $search->longitude
-            ]]);
-
-            return view('partial.services',compact('thatPlace'));
-
         } else {
-
             $search = $this->repository->oneDistrict("Analamanga");
 
-            $thatPlace = $this->lieux->allWhere($search,[],15);
-
-            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
-                'lat' => $search->latitude,
-                'lng' => $search->longitude
-            ]]);
-
-            return view('partial.services',compact('thatPlace'));
-
         }
+
+        return $this->loadResult($search,$request);
 
     }
 
@@ -340,4 +145,73 @@ class FrontController extends Controller
          
     }
 
+    public function localizeMe(Request $request) {
+
+        $thatPlace = [];
+
+        if($request->has('lat') && $request->has('lng')) {
+
+            $thatPlace = $this->lieux->allWhere($request->only('lat','lng'),[],.3);
+
+            $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
+                'lat' => $request->get('lat'),
+                'lng' => $request->get('lng')
+            ]]);
+
+            return view('partial.services',compact('thatPlace'));
+
+        } else {
+
+            return view('partial.services',['place'=>$thatPlace]);
+
+        }
+
+    }
+
+    public function loadResult($search,$request,$locality) {
+
+
+        $thatPlace = [];
+
+        if(!$search) {
+            $thatPlace = ['place'=>$thatPlace];
+
+            return view('partial.services',compact('thatPlace'));
+
+        }
+
+        $specified_query = [];
+
+        if($request->has('sv')) {
+
+            array_push($specified_query,strtolower($request->get('sv')));
+
+        } else {
+
+            if($request->has('sv-h'))
+                array_push($specified_query,'huiles');
+            if($request->has('sv-a'))
+                array_push($specified_query,'accessoires');
+            if($request->has('sv-g'))
+                array_push($specified_query,'garage');
+            if($request->has('sv-p'))
+                array_push($specified_query,'pieces');
+            if($request->has('sv-m'))
+                array_push($specified_query,'vente_moto');
+            if($request->has('sv-per'))
+                array_push($specified_query,'personnalisation');
+
+        }
+
+        $thatPlace = $this->lieux->allWhere($search,$specified_query,150,$locality);
+
+        $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
+            'lat' => $search->latitude,
+            'lng' => $search->longitude
+        ]]);
+
+
+        return view('partial.services',compact('thatPlace'));
+        
+    }
 }

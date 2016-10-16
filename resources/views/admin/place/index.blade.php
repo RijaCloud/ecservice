@@ -18,7 +18,7 @@
                 <div class="col-md-8">
                     <div class="box box-default">
                         <div class="box-header box-with-border">
-                            <h3 class="box-title">EveryCycle</h3>
+                            <h3 class="box-title">WheelsMada</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>

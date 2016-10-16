@@ -14,6 +14,7 @@ class Lieu extends Model
     protected $hidden = ['created_at','updated_at','fokontany_id'];
 
     public $timestamps = true;
+
     /**
      * The One to Many Relation
      * Plusieurs lieux consacrer aux motos appartienent à une commune
@@ -21,7 +22,7 @@ class Lieu extends Model
      */
     public function fokontany() {
 
-        return $this->belongsTo(Commune::class);
+        return $this->belongsTo(Fokontany::class,'id');
 
     }
 

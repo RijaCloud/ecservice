@@ -78,8 +78,8 @@
                 <div class="box-body">
                     <div class="row" id="info" style="display:none;">
                         <div class="col-md-12">
-                            <a class="btn btn-primary" id="edit">Editer</a>
-                            <form action="" id="delete" method="POST">
+                            <a style="display:inline-block;" class="btn btn-primary" id="edit">Editer</a>
+                            <form style="display:inline-block;" action="" id="delete" method="POST">
                                 {{ csrf_field() }}
                                 <button class="btn btn-warning" id="delete">Supprimer</button>
                             </form>

@@ -50,6 +50,7 @@ class ImageHaveBeenUpload
 
             $save = new \App\Models\Image();
             $save->image_dir = public_path('infoImage');
+            $save->place_id = $event->lieu->id;
             $save->image_name = $event->lieu->string_lieu;
             $save->image_large = $event->lieu->string_lieu . 'large.png';
             $save->image_medium = $event->lieu->string_lieu . 'medium.png';

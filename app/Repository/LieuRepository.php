@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Models\Lieu;
 use App\Models\Moto;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class LieuRepository {
@@ -190,7 +191,8 @@ class LieuRepository {
         $place = $this->getById($id);
         
         $param = collect($param);
-        $newdata = $param->only(['name','description','longitude','latitude','fokontany','commune','departemnet','region','province']);
+
+        $newdata = $param->only(['name','description','longitude','latitude','fokontany','commune','district','region','province']);
         $newdata['string_lieu'] = $param->get('name');
         $newdata->forget('name');
         $newdata['fokontany_id'] = $param->get('fokontany');
@@ -201,9 +203,9 @@ class LieuRepository {
         $newdata->forget('region');
         $newdata['province_id'] = $param->get('province');
         $newdata->forget('province');
-        $newdata['departement_id'] = $param->get('departement');
-        $newdata->forget('departement');
-
+        $newdata['district_id'] = $param->get('district');
+        $newdata->forget('district');
+        
         $place->update($newdata->toArray());
     }
 
@@ -225,10 +227,10 @@ class LieuRepository {
         
     }
     
-    public function allWhere($param, $specified = [] , $d = 2) {
+    public function allWhere($param, $specified = [] , $d = .5, $entity = null) {
 
-        $lat = $param->latitude;
-        $lng = $param->longitude;
+        $lat =  isset($param['lat']) ? $param['lat'] : $param->latitude;
+        $lng =  isset($param['lng']) ? $param['lng'] : $param->longitude;
         $circonference = 40000;
         $deg = 111;
         $distance_longitude = $circonference * cos($deg) / 360;
@@ -239,33 +241,100 @@ class LieuRepository {
         $lngnegatif = $lng - ($d / $distance_longitude);
         $lngpositif = $lng + ($d / $distance_longitude);
 
+        $specified = array_flip($specified);
+        
         if(count($specified) != 0) {
 
             $long_query = $this->moto;
-            //->where(DB::raw('moto.fokontany_id = '.$param->id));
-
-            foreach($specified as $sp) {
-                $long_query->$sp();
-            }
 
             return $long_query
-                ->join('lieu',function($joins) use ($latnegatif,$latpositif,$lngnegatif,$lngpositif) {
-                    $joins
-                        ->on('moto.lieu_id','=','lieu.id')
-                        ->whereBetween('lieu.latitude',[$latnegatif,$latpositif])
-                        ->whereBetween('lieu.longitude',[$lngpositif,$lngnegatif]);
+
+                ->when(isset($specified['garage']) , function($query){
+                    return $query->garage();
+                })->when(isset($specified['pieces']) , function($query){
+                    return $query->pieces();
+                })->when(isset($specified['personnalisation']) , function($query){
+                    return $query->personnalisation();
                 })
-                ->get();
+                ->when(isset($specified['accessoires']) , function($query){
+                    return $query->accessoires();
+                })->when(isset($specified['vente_moto']) , function($query){
+                    return $query->moto();
+                })->when(isset($specified['huiles']) , function($query){
+                    return $query->huiles();
+                })
+                ->whereBetween('lieu.latitude',[$latnegatif,$latpositif])
+                ->whereBetween('lieu.longitude',[$lngpositif,$lngnegatif])
+
+            ->join('lieu',function($joins) {
+                    $joins
+                        ->on('moto.lieu_id','=','lieu.id');
+            })
+            ->when($entity == "fokontany" , function($query) use ($param) {
+
+                return $query->where('lieu.fokontany_id',$param->id);
+
+            })
+            ->when($entity == "district" , function($query) use ($param) {
+
+                return $query->where('lieu.district_id',$param->id);
+
+            })
+            ->when($entity == "commune" , function($query) use ($param) {
+
+                return $query->where('lieu.commune_id',$param->id);
+
+            })
+            ->when($entity == "region" , function($query) use ($param) {
+
+                return $query->where('lieu.region_id',$param->id);
+
+            })
+            ->when($entity == "province" , function($query) use ($param) {
+
+                return $query->where('lieu.province_id',$param->id);
+
+            })
+            ->take(10)
+            ->get();
 
         } else {
 
-            return  $this->moto
-                ->join('lieu',function($joins) use($latnegatif,$latpositif,$lngnegatif,$lngpositif) {
+            $long = $this->moto
+                ->whereBetween('lieu.latitude',[$latnegatif,$latpositif])
+                ->whereBetween('lieu.longitude',[$lngpositif,$lngnegatif]);
+
+            return  $long
+                ->join('lieu',function($joins) {
                     $joins
-                        ->on('moto.lieu_id','=','lieu.id')
-                        ->whereBetween('lieu.latitude',[$latnegatif,$latpositif])
-                        ->whereBetween('lieu.longitude',[$lngpositif,$lngnegatif]);
+                        ->on('moto.lieu_id','=','lieu.id');
                 })
+                ->when($entity == "fokontany" , function($query) use ($param) {
+
+                return $query->where('lieu.fokontany_id',$param->id);
+
+            })
+            ->when($entity == "district" , function($query) use ($param) {
+
+                return $query->where('lieu.district_id',$param->id);
+
+            })
+            ->when($entity == "commune" , function($query) use ($param) {
+
+                return $query->where('lieu.commune_id',$param->id);
+
+            })
+            ->when($entity == "region" , function($query) use ($param) {
+
+                return $query->where('lieu.region_id',$param->id);
+
+            })
+            ->when($entity == "province" , function($query) use ($param) {
+
+                return $query->where('lieu.province_id',$param->id);
+
+            })
+                ->take(10)
                 ->get();
 
         }

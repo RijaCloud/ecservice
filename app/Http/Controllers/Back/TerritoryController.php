@@ -40,7 +40,7 @@ class TerritoryController extends Controller
      * */
     public function country(Request $request) {
 
-        $latest = $this->repository->allRegion();
+        $latest = $this->repository->allRegion(5);
         $parent = $this->repository->allProvince();
         
         if($request->isXmlHttpRequest()) {
@@ -108,7 +108,7 @@ class TerritoryController extends Controller
      * */
     public function town(Request $request) {
 
-        $latest = $this->repository->allCommune();
+        $latest = $this->repository->allCommune(5);
         $parent = $this->repository->allDistrict();
         if($request->isXmlHttpRequest()) {
             return view('admin.ajaxify.territory.town',compact('latest','parent'));
@@ -171,7 +171,7 @@ class TerritoryController extends Controller
      * */
     public function province(Request $request) {
 
-        $latest = $this->repository->allProvince();
+        $latest = $this->repository->allProvince(5);
         
         if($request->isXmlHttpRequest()) {
             return view('admin.ajaxify.territory.province',compact('latest'));
@@ -239,7 +239,7 @@ class TerritoryController extends Controller
      */
     public function fokontany(Request $request) {
 
-        $latest = $this->repository->allFokontany();
+        $latest = $this->repository->allFokontany(5);
         
         $parent = $this->repository->allCommune();
 
@@ -302,7 +302,7 @@ class TerritoryController extends Controller
      */
     public function district(Request $request) {
 
-        $latest = $this->repository->allDistrict();
+        $latest = $this->repository->allDistrict(5);
         $parent = $this->repository->allRegion();
 
         if($request->isXmlHttpRequest()) {
