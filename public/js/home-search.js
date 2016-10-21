@@ -32,7 +32,7 @@ $(function() {
 
     $('#mysf').on('keyup' , function() {
 
-        if( $(this).val().length >= 2 && !chosen ) {
+        if( $(this).val().length >= 2) {
 
             $.ajax({
                 url: "/search?s="+$(this).val()

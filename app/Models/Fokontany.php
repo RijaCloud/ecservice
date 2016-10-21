@@ -25,7 +25,7 @@ class Fokontany extends Model
     
     public function scopeFilter($query,$match) {
 
-        return $query->where('nom','LIKE',"%$match%")->orderBy(DB::raw('RAND()'))->get();
+        return $query->where('nom','LIKE',"%$match%")->orderBy(DB::raw('RAND()'))->take(5)->get();
 
     }
 }
