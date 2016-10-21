@@ -37,6 +37,14 @@ class LieuRepository {
     }
 
     /**
+     * @return mixed
+     */
+    public function countAll() {
+
+        return $this->moto->select(DB::raw('COUNT(*) as all'))->get();
+    }
+
+    /**
      * Retourne une liste de lieu au hasard
      * @param $limit
      * @return mixed
@@ -141,6 +149,8 @@ class LieuRepository {
         $place->district_id = $input['district'];
         $place->region_id = $input['region'];
         $place->province_id = $input['province'];
+        $place->address = $input['adresse'];
+        $place->telephone = $input['telephone'];
         $place->moto = true;
         
         if($place->save())
@@ -176,8 +186,10 @@ class LieuRepository {
     public function deleteById($id) {
 
         $place = $this->model->where('id',$id)->first();
-
-        return  $place->delete();
+        return  [
+            $place,
+            $place->delete()
+        ];
         
     }
 
@@ -192,7 +204,8 @@ class LieuRepository {
         
         $param = collect($param);
 
-        $newdata = $param->only(['name','description','longitude','latitude','fokontany','commune','district','region','province']);
+        $newdata = $param->only(['name','description','longitude','latitude','fokontany','commune','district','region','province','telephone','adresse']);
+        
         $newdata['string_lieu'] = $param->get('name');
         $newdata->forget('name');
         $newdata['fokontany_id'] = $param->get('fokontany');
@@ -205,6 +218,10 @@ class LieuRepository {
         $newdata->forget('province');
         $newdata['district_id'] = $param->get('district');
         $newdata->forget('district');
+        $newdata['telephone'] = $param->get('telephone');
+        $newdata->forget('telephone');
+        $newdata['address'] = $param->get('adresse');
+        $newdata->forget('adresse');
         
         $place->update($newdata->toArray());
     }
@@ -340,5 +357,110 @@ class LieuRepository {
         }
 
     }
-    
+
+
+    public function allWhereByLimit($param, $specified = [] , $d = .5, $entity = null,$from = null, $limit = null ) {
+
+        $specified = array_flip($specified);
+
+        if(count($specified) != 0) {
+
+            $long_query = $this->moto;
+
+            return $long_query
+
+                ->when(isset($specified['garage']) , function($query){
+                    return $query->garage();
+                })->when(isset($specified['pieces']) , function($query){
+                    return $query->pieces();
+                })->when(isset($specified['personnalisation']) , function($query){
+                    return $query->personnalisation();
+                })
+                ->when(isset($specified['accessoires']) , function($query){
+                    return $query->accessoires();
+                })->when(isset($specified['vente_moto']) , function($query){
+                    return $query->moto();
+                })->when(isset($specified['huiles']) , function($query){
+                    return $query->huiles();
+                })
+                ->join('lieu',function($joins) {
+                    $joins
+                        ->on('moto.lieu_id','=','lieu.id');
+                })
+                ->when($entity == "fokontany" , function($query) use ($param) {
+
+                    return $query->where('lieu.fokontany_id',$param->id);
+
+                })
+                ->when($entity == "district" , function($query) use ($param) {
+
+                    return $query->where('lieu.district_id',$param->id);
+
+                })
+                ->when($entity == "commune" , function($query) use ($param) {
+
+                    return $query->where('lieu.commune_id',$param->id);
+
+                })
+                ->when($entity == "region" , function($query) use ($param) {
+
+                    return $query->where('lieu.region_id',$param->id);
+
+                })
+                ->when($entity == "province" , function($query) use ($param) {
+
+                    return $query->where('lieu.province_id',$param->id);
+
+                })
+                ->when(!is_null($from) , function($query) use($from,$limit) {
+                    return $query->offset($from)->limit($limit);
+                },function($query) {
+                    return $query->take(10);
+                })
+                ->get();
+
+        } else {
+
+            $long = $this->moto;
+
+            return  $long
+                ->join('lieu',function($joins) {
+                    $joins
+                        ->on('moto.lieu_id','=','lieu.id');
+                })
+                ->when($entity == "fokontany" , function($query) use ($param) {
+
+                    return $query->where('lieu.fokontany_id',$param->id);
+
+                })
+                ->when($entity == "district" , function($query) use ($param) {
+
+                    return $query->where('lieu.district_id',$param->id);
+
+                })
+                ->when($entity == "commune" , function($query) use ($param) {
+
+                    return $query->where('lieu.commune_id',$param->id);
+
+                })
+                ->when($entity == "region" , function($query) use ($param) {
+
+                    return $query->where('lieu.region_id',$param->id);
+
+                })
+                ->when($entity == "province" , function($query) use ($param) {
+
+                    return $query->where('lieu.province_id',$param->id);
+
+                })
+                ->when($from , function($query) use($from,$limit) {
+                    return $query->offset($from)->limit($limit);
+                },function($query) {
+                    return $query->take(10);
+                })
+                ->get();
+
+        }
+
+    }
 }

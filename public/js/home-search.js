@@ -32,17 +32,44 @@ $(function() {
 
     $('#mysf').on('keyup' , function() {
 
-        if($(this).val().length >= 4) {
+        if( $(this).val().length >= 2 && !chosen ) {
 
             $.ajax({
                 url: "/search?s="+$(this).val()
             }).done(function(data) {
-                var $drop = $(this).parent().next('.dropdown');
-                
+                var $drop = $('.dropdown').find('ul');
+                $drop.removeClass('hidden')
+                if($drop.find('li').length) {
+                    var li = $drop.find('li')
+                    for ( var i = 0 ; i  < li.length ; i++) {
+                        li.remove()
+                    }
+                }
+                for ( var i = 0 ; i  < data.length ; i++) {
+
+                    var li =  $('<li></li>');
+                    li.addClass('dropdown-list')
+                    li.html(data[i].nom)
+
+                    $drop.append(li)
+
+                }
             })
 
         }
 
+    })
+
+    $('.dropdown ul').on('click','li', function() {
+            
+        $('#mysf').val($(this).html())
+        $('.dropdown').find('ul').addClass('hidden')
+        var $drop = $('.dropdown').find('ul')
+        var li = $drop.find('li')
+        for ( var i = 0 ; i  < li.length ; i++) {
+            li.remove()
+        }
+        chosen = true
     })
 
     $('#mys').on('blur', function(e) {
@@ -67,8 +94,6 @@ $(function() {
             window.location.href = "/fokontany/"+mf.val()+"?sv="+ms.val()
 
         }
-
-
 
     })
 });

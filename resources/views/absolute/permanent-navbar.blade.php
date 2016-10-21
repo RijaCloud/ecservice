@@ -3,9 +3,10 @@
         <div class="wrapper">
             <div class="leftNav">
                 <div class="logo">
-                    <a href="/" id="logo">EveryCycle</a>
+                    <a href="/" id="logo">WheelsMada</a>
                 </div>
             </div>
+        <!--
             <div class="rightNav" id="navRight">
 
                 <div class="area-input">
@@ -28,7 +29,9 @@
                     </form>
                 </div>
             </div>
+        -->
         </div>
+
     </div>
 </div>
 <div class="clearfix"></div>

@@ -24,7 +24,7 @@ class ProvinceRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|not_in:province|string",
+            "nom" => "required|not_in:province|string",
             "latitude" => "required|numeric",
             "longitude" => "required|numeric",
             'description' => "",

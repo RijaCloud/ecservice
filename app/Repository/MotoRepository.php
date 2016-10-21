@@ -17,7 +17,7 @@
             $moto = new $this->model;
             $moto->lieu_id = $id;
             $moto->garage = (array_key_exists('garage',$input)) ? true : false;
-            $moto->personnalisation = (array_key_exists('peronnalisation',$input)) ? true : false;
+            $moto->personnalisation = (array_key_exists('personnalisation',$input)) ? true : false;
             $moto->accessoires = (array_key_exists('accessoires',$input)) ? true : false;
             $moto->pieces = (array_key_exists('pieces',$input)) ? true : false;
             $moto->huiles = (array_key_exists('huiles',$input)) ? true : false;

@@ -24,7 +24,7 @@ class CountryRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|not_in:region",
+            "nom" => "required|not_in:region",
             "province_id" => "required|numeric|exists:province,id",
             "latitude" => "required|numeric",
             "longitude" => "required|numeric",

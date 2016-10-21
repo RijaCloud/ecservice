@@ -58,7 +58,11 @@
                                     @foreach($latest as $last)
                                         <li class="item">
                                             <div class="product-img">
-
+                                                <?php if(file_exists(public_path('infoImage/'.$last->string_lieu.'medium.png'))): ?>
+                                                <img src="{{ asset('infoImage/'.$last->string_lieu.'small.png') }}" alt="{{ $last->string_lieu }}">
+                                                <?php else:?>
+                                                    <img src=" {{asset('img/default.png') }}" alt="{{ $last->string_lieu }}">
+                                                <?php endif; ?>
                                             </div>
                                             <div class="product-info">
                                                 <?php $uri = last( explode('/',Request::url()) ); ?>
@@ -128,6 +132,17 @@
 
                                 </div>
                                 <div class="form-group">
+                                    <label for="tel">Telephone</label>
+                                    <input type="text" class="form-control" name="telephone" id="tel" placeholder="ex: 034 00 000 00">
+                                    <span class="error alert alert-danger hidden"></span>
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="ad">Adresse</label>
+                                    <textarea name="adresse" class="form-control" id="ad" placeholder="Lot 72 terre Antsakaviro"></textarea>
+                                    <span class="error alert alert-danger hidden"></span>
+                                </div>
+                                <div class="form-group">
                                     <label for="latitude">Image</label>
                                     <input type="file" class="form-control" name="image" id="image">
 
@@ -159,7 +174,7 @@
                                         Personnalisateur
                                     </label>
                                     <label style="display:block;">
-                                        <input type="checkbox" name="accessoroires" class="flat-red">
+                                        <input type="checkbox" name="accessoires" class="flat-red">
                                         Fournisseur d'accessoire
                                     </label>
                                     <label style="display:block;">
@@ -249,6 +264,8 @@
                 data.append('latitude',latitude.val())
                 data.append('fokontany',$('#fokontany').val())
                 data.append('_token',$('input[type=hidden]').val())
+                data.append('adresse',$('#ad').val())
+                data.append('telephone',$('#tel').val())
 
                 $.ajax({
                     data:data,
@@ -262,6 +279,8 @@
                     description.val('')
                     longitude.val('')
                     latitude.val('')
+                    $('#ad').val('')
+                    $('#tel').val('')
                 }).fail(function(data) {
                     var error = data.responseJSON;
 

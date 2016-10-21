@@ -127,7 +127,7 @@
             $commune = new $this->commune;
 
             $commune->nom = $input['nom'];
-            $commune->departement_id = $input['district_id'];
+            $commune->district_id = $input['district_id'];
             $commune->latitude = $input['latitude'];
             $commune->longitude = $input['longitude'];
             $commune->description = $input['description'];
@@ -165,10 +165,9 @@
          * @return mixed
          */
         public function allRegion($limit  = null) {
+            
             if($limit)
-                return $this->region->latest()->limit(function($q) use($limit) {
-                    return count($q->all()) > 5 ? 5 : $limit;
-                })->get();
+                return $this->region->latest()->limit($limit)->get();
             else
                 return $this->region->latest()->get();
         }
@@ -280,9 +279,9 @@
          */
         public function allFokontany($limit = null ) {
             if($limit)
-                return $this->fokontany->latest()->limit($limit)->get();
+                return $this->fokontany->latest()->orderBy('nom','asc')->limit($limit)->get();
             else
-                return $this->fokontany->latest()->get();
+                return $this->fokontany->latest()->orderBy('nom','asc')->get();
         }
 
         /**

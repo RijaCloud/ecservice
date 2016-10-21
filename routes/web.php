@@ -15,13 +15,23 @@ Route::get('/',['as'=>'home' ,"uses"=>"FrontController@index"]);
 
 Route::get('/district/{name?}',['uses'=>'FrontController@district'])->where('name','[a-zA-Z -]+');
 
+Route::get('/district/get/{name?}',['uses'=>'FrontController@district','middleware'=>"web"])->where('name','[a-zA-Z -]+');
+
 Route::get('/commune/{name?}',['uses'=>'FrontController@commune'])->where('name','[a-zA-Z -]+');
+
+Route::get('/commune/get/{name?}',['uses'=>'FrontController@commune','middleware'=>"web"])->where('name','[a-zA-Z -]+');
 
 Route::get('/fokontany/{name?}',['uses'=>'FrontController@fokontany'])->where('name','[a-zA-Z -]+');
 
+Route::get('/fokontany/get/{name?}',['uses'=>'FrontController@fokontany','middleware'=>"web"])->where('name','[a-zA-Z -]+');
+
 Route::get('/region/{name?}', ['uses'=>'FrontController@region'])->where('name','[a-zA-Z -]+');
 
+Route::get('/region/get/{name?}',['uses'=>'FrontController@region','middleware'=>"web"])->where('name','[a-zA-Z -]+');
+
 Route::get('/match', 'FrontController@match')->name('match');
+
+Route::get('/search', 'FrontController@search')->name('search');
 
 Route::get('/localizeMe', 'FrontController@localizeMe')->name('localize');
 

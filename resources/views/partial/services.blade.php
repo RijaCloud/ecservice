@@ -7,6 +7,7 @@
     <meta name="robots" content="dofollow,doindex">
     <meta name="description" content="Trouver les lieux spécialiser dans la maintenance, l'entretient et la personnalisation de votre moto à Antananarivo" >
     <link rel="stylesheet" href="{{ asset('js/iCheck/skins/all.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/map.css') }}">
     <script src="{{ asset('js/iCheck/icheck.js') }}"></script>
 @endsection
 
@@ -17,18 +18,16 @@
     <div class="body-container" id="body">
 
         <div class="row">
-            <div class="col-md-8">
-                <div class="canvas-container" style="
-    height: 501px;
-    margin: 30px;
-    margin-top: 10px;
-    box-shadow: 0px 1px 1px 5px rgba(64, 63, 63, 0.04), 0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33);
-        ">
-                    <div id="canvas" style="position:relative;max-width:100%;max-height:100%"></div>
-                </div>
+            <div class="col-md-12">
+
+                <section class="content-fixed" id="fixedRight">
+                    <?php $place = $thatPlace['place'] ?>
+                    @include('absolute.loop-array',[$place])
+                </section>
                 <div class="content-fixed-top animated" id="topRight">
                     <span class="top-content">
-                        Recherche avancée :
+                        Les resultats ne vous conviennent-ils pas ? <br>
+                        Vous avez la possibilité de filtrer les resultats par :
                     </span>
                     <form action="/"  autocomplete="off" method="get" id="territorySpecification" class="territory-display">
                         <label for="display">Par:</label>
@@ -44,8 +43,9 @@
 
                             </div>
                         </div>
-                        <div class="form-group hidden" id="actif">
 
+                        <div class="form-group hidden" id="actif">
+                            <h5> Details : </h5>
                             <div>
 
                                 <input type="checkbox"  id="garage" name="sv-g">
@@ -87,10 +87,9 @@
             </div>
             <div class="col-md-4" id="section-right">
 
-                <section class="content-fixed" id="fixedRight">
-                    <?php $place = $thatPlace['place'] ?>
-                    @include('absolute.loop-array',[$place])
-                </section>
+                <div class="canvas-container">
+                    <div id="canvas" style="position:relative;max-width:100%;max-height:100%"></div>
+                </div>
             </div>
 
         </div>
@@ -107,8 +106,6 @@
     <script>
         $(function() {
             var height = $(window).height() - $("header-fixed").height();
-            $('#group').css('max-height',height);
-            $('#group').css('min-height',height);
             $('#canvas').css('height',height-60).css('padding-bottom',20);
         })
     </script>
@@ -163,21 +160,24 @@
                         }
 
                         if( data.length && !chosen ) {
-                            for(var d in data) {
 
-                                if(d.nom == $('#s').val()) {
+                            var result = $('.result')
+
+                            result.removeClass('hidden')
+
+                            for(var d = 0 ; d < data.length ; d++) {
+
+                                if( data[d].nom == $('#s').val() ) {
                                     chosen = true
                                     $('#actif').removeClass('hidden')
 
                                     return
                                 }
 
+                                var span = $(' <span> ').addClass('list').text(data[d].nom)
+                                result.append(span)
+
                             }
-
-
-                            var span = $(' <span> ').addClass('list').html(data[0].nom)
-
-                            $('.result').removeClass('hidden').append(span)
 
                         }
 
@@ -223,12 +223,9 @@
                 center: {
                     lat: "{{  isset($thatPlace['center']) ?  $thatPlace['center']['lat'] : -18.9149 }}",
                     lng: "{{  isset($thatPlace['center']) ? $thatPlace['center']['lng'] : 47.5316 }}"
-                },
-                bike: "{{ asset('img/bike2.png') }}",
-                repair: "{{ asset('img/repair.png') }}",
-                oil: "{{ asset('img/oil2.png') }}",
+                }
             })
-
+                app.getMoreResult(document.getElementById('more'))
         })
     </script>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Back;
 
 use App\Events\ImageToModify;
 use App\Events\ImageToUpload;
+use App\Events\LieuHasBeenDeleted;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlaceRequest;
@@ -62,7 +63,7 @@ class PlaceController extends Controller
     
     public function store(PlaceRequest $request, MotoRepository $moto) {
 
-        $info = $request->only('name','description','fokontany','latitude','longitude');
+        $info = $request->only('name','description','fokontany','latitude','longitude','telephone','adresse');
 
         $description = array_diff($request->all(),$info);
         $fokontany = $this->repository->oneFokontany($request->input('fokontany'));
@@ -97,7 +98,9 @@ class PlaceController extends Controller
 
         $delete = $this->place->deleteById($id);
 
-        if($delete)
+        event( new LieuHasBeenDeleted($delete[0]) );
+        
+        if($delete[1])
             return back()->withInput(['success'=>'Lieu bien supprimer']);
         
     } 
@@ -105,7 +108,7 @@ class PlaceController extends Controller
     public function updatePlace(PlaceRequest $request, $id) {
         $id = explode('-',$id)[0];
         $param = $request->except(['_token']);
-
+        
         $fokontany = $this->repository->oneFokontany($request->input('fokontany'));
         $commune = $this->repository->oneCommune($fokontany['commune_id']);
         $departement = $this->repository->oneDistrict($commune['district_id']);
@@ -115,13 +118,14 @@ class PlaceController extends Controller
         $new_array = ['fokontany'=>$request->input('fokontany'),'commune'=>$commune->id,'district'=>$departement->id,'region'=>$region->id,'province'=>$province->id];
         
         $moto_merge = array_merge($param , $new_array);
-
+        
         if($request->hasFile('file')) {
             event(new ImageToModify($request->file('file'),$id));
         }
         
         $this->place->updateById($id,$moto_merge);
         $this->moto->updateByPlaceId($id,$moto_merge);
+        
     }
     
     public function readPlace(Request $request ,$id) {
@@ -135,12 +139,9 @@ class PlaceController extends Controller
             if($request->isXmlHttpRequest()) {
                 return response()->json($place);
             } else {
-
                 $fokontany = $this->repository->allFokontany();
                 return view('admin.place.read', compact('place','fokontany'));
-
             }
-            
         }
     }
 }

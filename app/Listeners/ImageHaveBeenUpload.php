@@ -56,6 +56,8 @@ class ImageHaveBeenUpload
             $save->image_medium = $event->lieu->string_lieu . 'medium.png';
             $save->image_small = $event->lieu->string_lieu . 'small.png';
             $save->save();
+            
+            $event->lieu->update(['image',$event->lieu->string_lieu]);
 
         }
 

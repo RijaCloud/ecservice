@@ -22,7 +22,7 @@
             'action'=>action('Back\TerritoryController@createTown'),
             'placeholder'=>'Commune',
             'parent'=>$parent,
-            'appart'=>'D&eacute;partement'
+            'appart'=>'District'
         ])
 
     </div>

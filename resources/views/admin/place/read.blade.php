@@ -87,13 +87,27 @@
                                         <input type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude" value="{{ (string) $place->lieu->latitude }}">
                                         <span class="error alert alert-danger hidden"></span>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="tel">Telephone</label>
+                                        <input type="text" class="form-control" name="telephone" id="tel" placeholder="ex: 034 00 000 00" value="{{ (string) $place->lieu->telephone }}">
+                                        <span class="error alert alert-danger hidden"></span>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ad">Adresse</label>
+                                        <textarea name="adresse" class="form-control" id="ad" placeholder="Lot 72 terre Antsakaviro">{{ (string) $place->lieu->address }}</textarea>
+                                        <span class="error alert alert-danger hidden"></span>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                <div class="form-group">
                                     <label for="latitude">Image</label>
                                     <input type="file" class="form-control" name="image" id="image">
-
+                                    <?php if(file_exists(public_path('infoImage/'.$place->lieu->string_lieu.'medium.png'))): ?>
+                                    <img src="{{ asset('infoImage/'.$place->lieu->string_lieu.'medium.png') }}" alt="{{ $place->lieu->string_lieu }}">
+                                    <?php endif;?>
                                 </div>
 
                                     <div class="form-group">
@@ -132,6 +146,7 @@
                                         </label>
 
                                     </div>
+                                    <span class="hidden success alert alert-success" style="display:block;"> Action succés </span>
                                     <button class="btn btn-sm btn-info btn-flat pull-right">Enregistrer</button>
 
                                 </div>
@@ -149,7 +164,10 @@
     <script src="{{ asset('admin/js/load-map.js') }}"></script>
 
     <script>
-        app.map.initMap(document.getElementById('canvas'));
+        app.map.initMap(document.getElementById('canvas'),{
+            lat:  document.getElementById('latitude').getAttribute('value'),
+            lng: document.getElementById('longitude').getAttribute('value')
+        });
 
         document.getElementById('localisation').addEventListener('click', function(e) {
 
@@ -199,6 +217,11 @@
 
                 }
 
+                if(!$('.success').hasClass('hidden')) {
+                    $('.success').addClass('hidden')
+                }
+
+
                 var data = new FormData();
 
                 if(file) {
@@ -215,6 +238,8 @@
                 data.append('latitude',latitude.val())
                 data.append('fokontany',$('#fokontany').val())
                 data.append('_token',$('input[type=hidden]').val())
+                data.append('adresse',$('#ad').val())
+                data.append('telephone',$('#tel').val())
 
 
                 $.ajax({
@@ -225,7 +250,7 @@
                     processData: false,
                     contentType: false
                 }).done(function() {
-                    
+                    $('.success').removeClass('hidden')
                 }).fail(function(data) {
                     var error = data.responseJSON;
 

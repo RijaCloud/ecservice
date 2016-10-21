@@ -37,9 +37,10 @@ class FrontController extends Controller
      * @return mixed
      */
     public function fokontany(Request $request,$name = null) {
-
+        
         if(!is_null($name)) {
 
+            
             $search = $this->repository->oneFokontany($name);
 
         } else {
@@ -48,7 +49,7 @@ class FrontController extends Controller
 
         }
 
-        return $this->loadResult($search,$request,'fokontany');
+        return $this->loadResult($search,$request,'fokontany',1.2);
     }
 
 
@@ -69,7 +70,7 @@ class FrontController extends Controller
 
         }
 
-        return $this->loadResult($search,$request,'commune');
+        return $this->loadResult($search,$request,'commune',2);
     }
 
     /**
@@ -89,7 +90,7 @@ class FrontController extends Controller
 
         }
 
-        return $this->loadResult($search,$request,'region');
+        return $this->loadResult($search,$request,'region',3);
     }
 
 
@@ -108,7 +109,7 @@ class FrontController extends Controller
 
         }
 
-        return $this->loadResult($search,$request);
+        return $this->loadResult($search,$request,'district',4);
 
     }
 
@@ -145,6 +146,21 @@ class FrontController extends Controller
          
     }
 
+
+    public function search(Request $request) {
+
+        if($request->has('s')) {
+
+            $match = $request->get('s');
+
+            $instance = new Fokontany();
+
+            return $instance->filter($match);
+
+        }
+
+    }
+
     public function localizeMe(Request $request) {
 
         $thatPlace = [];
@@ -168,8 +184,7 @@ class FrontController extends Controller
 
     }
 
-    public function loadResult($search,$request,$locality) {
-
+    public function loadResult($search,$request,$locality,$d) {
 
         $thatPlace = [];
 
@@ -200,6 +215,24 @@ class FrontController extends Controller
                 array_push($specified_query,'vente_moto');
             if($request->has('sv-per'))
                 array_push($specified_query,'personnalisation');
+
+        }
+
+
+        if($request->isXmlHttpRequest()) {
+
+            if($request->has('more')) {
+
+                $from = $request->get('more');
+                $limit = 10;
+                do {
+                    $list = $this->lieux->allWhereByLimit($search,$specified_query,$d,$locality,$from,$limit);
+                    $d += .2;
+                } while( $list->isEmpty() );
+                $n = $list->count();
+                return response()->json(['list'=>$list,'d'=>$d,'n'=>$n]);
+
+            }
 
         }
 

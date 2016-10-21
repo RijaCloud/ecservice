@@ -294,38 +294,14 @@ var app  = {
                 var longitude = element[e].getAttribute('data-lng')
                 var id = element[e].getAttribute('data-id')
                 var marker_name = element[e].getAttribute('data-name')
+                var img = element[e].getAttribute('data-img')
+                var tel = element[e].getAttribute('data-tel')!= "" ?
+                '<span class="pan" style="color:black!important;">'+'<strong class=""> '+ "Telephone : "+ element[e].getAttribute('data-tel') +'</strong>'+'</span>' : ""
+                var address = element[e].getAttribute('data-address') != "" ? '<span class="pan" style="color:black!important;">'+
+                '<strong class=""> '+ "Adresse : "+ element[e].getAttribute('data-address') +'</strong>' + '</span>': ""
                 var latLng = new google.maps.LatLng(latitude,longitude)
 
-                app.map.marker_name['map'+id] = '<div id="content">'+
-                    '<span class="pan" style="color:black!important;">'+
-                    marker_name
-                    +
-                    '</span>'+
-                    '</div>';
-
-
-
-                app.map.marker['map'+id] = new google.maps.Marker({
-                    map : app.map.carte,
-                    position: latLng,
-                    html: app.map.marker_name['map'+id],
-                    icon: image,
-                    shape : shape
-                })
-                
-                app.map.popup['map'+id] = new google.maps.InfoWindow()
-
-                app.map.popup['map'+id].setContent(app.map.marker_name['map'+id])
-
-                app.map.popup['map'+id].setPosition(new google.maps.LatLng(latitude,longitude))
-
-                google.maps.event.addListener(app.map.marker['map'+id], 'mouseover', function() {
-
-                    app.map.popup['map'+id].setContent(this.html)
-
-                    app.map.popup['map'+id].open(this.getMap(),this)
-
-                })
+                app.stuffFunction(latitude,longitude,id,marker_name,img,tel,address,latLng)
 
             }
 
@@ -395,6 +371,241 @@ var app  = {
 */
         app.map.carte.controls[google.maps.ControlPosition.TOP_RIGHT].push(goLocalize)
 
+    },
+    stuffFunction: function (latitude,longitude,id,marker_name,img,tel,address,latLng) {
+        app.map.marker_name['map'+id] = '<div id="content">'+
+            '<span class="pan" style="color:black!important;"> Lieu:'+
+            '<strong> '+
+            marker_name
+            +'</strong>'
+            + '</span>'+
+            address
+            + tel +
+            '<img style="margin:0 auto;display:inline-block;vertical-align:center;text-align:center;" src="'+img+'" alt="'+marker_name+'">'+
+            '</div>';
+
+        var image = {
+            url: window.location.origin+'/img/map-marker.png',
+            size: new google.maps.Size(32,32),
+            origin: new google.maps.Point(0,0),
+            anchor: new google.maps.Point(0, 32)
+        }
+
+        var shape = {
+            coords: [1, 1, 1, 20, 18, 20, 18, 1],
+            type: 'poly'
+        };
+
+        app.map.marker['map'+id] = new google.maps.Marker({
+            map : app.map.carte,
+            position: latLng,
+            html: app.map.marker_name['map'+id],
+            icon: image,
+            shape : shape
+        })
+
+        app.map.popup['map'+id] = new google.maps.InfoWindow()
+
+        app.map.popup['map'+id].setContent(app.map.marker_name['map'+id])
+
+        app.map.popup['map'+id].setPosition(new google.maps.LatLng(latitude,longitude))
+
+        google.maps.event.addListener(app.map.marker['map'+id], 'mouseover', function() {
+
+            app.map.popup['map'+id].setContent(this.html)
+
+            app.map.popup['map'+id].open(this.getMap(),this)
+
+        })
+
+        google.maps.event.addListener(app.map.marker['map'+id], 'mouseout', function() {
+
+            app.map.popup['map'+id].close()
+
+        })
+
+    },
+    getMoreResult: function(element) {
+
+        element.addEventListener('click', function(e) {
+            e.preventDefault()
+            var that = this
+            var regex = /((http:?||https:?)\/\/[\w\d:?]+\/[\w]+\/?([a-zA-z]+)?)(\?)([_\w=&\d]*)/gi
+            var href = this.getAttribute('data-href')
+            var more_result = []
+            if(regex.test(href)) {
+                
+                var http = new XMLHttpRequest();
+                
+                http.open('GET',href,true)
+                http.setRequestHeader('X-Requested-With','XMLHttpRequest');
+                http.onreadystatechange = function() {
+                    if(http.readyState == 4 && http.status == 200) {
+                        document.getElementById('load').classList.add('hidden')
+                        more_result = JSON.parse(http.responseText)
+                        app.appendMoreResult(more_result.list)
+                        var base =  href.substr(1).split('&')
+                        var more = base[2].replace(/\w+=/gi,'')
+                        var m = more_result.n + parseInt(more)
+                        var ref = href.replace(/more=\d+/gi,'more='+ m)
+                        that.setAttribute('data-href',ref)
+                        if ( more_result.list.length < 10 ) {
+                            that.parentNode.innerHTML = "Plus aucun résultat"
+                        }
+                    } else if ( http.status > 400 ) {
+                        document.getElementById('error').classList.remove('hidden')
+                    } else {
+                        document.getElementById('load').classList.remove('hidden')
+                    }
+                }
+                http.send(null)
+                
+            }
+            
+        })
+
+    },
+    appendMoreResult: function(result) {
+
+        var array = result
+
+        for(var k = 0 ; k < array.length ; k++ ) {
+
+            var ext = new String(array[k].image);
+
+            var img_small = ext.lastIndexOf('.') === -1 ? '/infoImage/'+array[k].image+'small.png' : '/img/'+array[k].image
+            var img_medium = ext.lastIndexOf('.') === -1 ? '/infoImage/'+array[k].image+'medium.png' : '/img/'+array[k].image
+
+            var li = document.createElement('li')
+            li.setAttribute('data-id',array[k].id)
+            li.setAttribute('data-lng',array[k].longitude)
+            li.setAttribute('data-lat',array[k].latitude)
+            li.setAttribute('data-name',array[k].string_lieu)
+            li.setAttribute('data-tel',array[k].telephone)
+            li.setAttribute('data-address',array[k].address)
+            li.setAttribute('data-img',window.location.origin+img_small)
+
+            var latitude = array[k].latitude
+            var longitude = array[k].longitude
+            var id = array[k].id
+            var marker_name = array[k].string_lieu
+            var img = window.location.origin+img_small
+            var tel = array[k].telephone != "" ?
+            '<span class="pan" style="color:black!important;">'+'<strong class=""> '+ "Telephone : "+ array[k].telephone +'</strong>'+'</span>' : ""
+            var address = array[k].address != "" ? '<span class="pan" style="color:black!important;">'+
+            '<strong class=""> '+ "Adresse : "+ array[k].address +'</strong>' + '</span>': ""
+            var latLng = new google.maps.LatLng(latitude,longitude)
+
+            app.stuffFunction(latitude,longitude,id,marker_name,img,tel,address,latLng)
+
+            li.classList.add('list-group-item')
+            li.classList.add('shade-list')
+            li.classList.add('marked')
+
+            var group = document.createElement('div')
+            group.classList.add('group-content')
+
+            var h = document.createElement('h4')
+            var strong = document.createElement('strong')
+            strong.innerText = array[k].string_lieu
+            h.appendChild(strong)
+            group.appendChild(h)
+
+            if(array[k].address) {
+                var span = document.createElement('span')
+                span.classList.add('content-address')
+                var h5 = document.createElement('h5')
+                h5.innerText = "Telephone"
+                span.appendChild(h5)
+                group.append(span)
+            }
+
+            if(array[k].telephone) {
+                var span = document.createElement('span')
+                span.classList.add('content-address')
+                var h5 = document.createElement('h5')
+                h5.innerText = "Telephone"
+                span.appendChild(h5)
+                group.append(span)
+            }
+
+            var div_fix = document.createElement('div')
+            div_fix.classList.add('clearfix')
+
+            var div = document.createElement('div')
+            div.classList.add('content-details')
+            div.classList.add('row')
+
+            var m8 = document.createElement('div')
+            m8.classList.add('col-md-8')
+            m8.innerHTML = `<h5>Description:</h5>`+ array[k].description
+
+            div.appendChild(m8)
+
+            var div_responsive = document.createElement('div')
+            div_responsive.classList.add('img-responsive')
+            div_responsive.classList.add('col-md-4')
+
+            var img = document.createElement('img')
+            img.setAttribute('src',window.location.origin + img_medium)
+            img.setAttribute('alt', array[k].string_lieu )
+
+            div_responsive.appendChild(img)
+
+            group.appendChild(div_fix)
+
+            div.appendChild(div_responsive)
+            group.appendChild(div)
+
+            var icon = document.createElement('div')
+            icon.classList.add('listicon')
+
+            var h52 = document.createElement('h5')
+            h52.innerText = "Details: "
+
+            var ul = document.createElement('ul')
+            var garage = array[k].garage === 1 ? "class=hidden": ""
+            var personnalisation = array[k].personnalisation === 1 ? "class=hidden": ""
+            var accessoires = array[k].accessoires === 1 ? "class=hidden": ""
+            var pieces = array[k].pieces === 1 ? "class=hidden": ""
+            var vente_moto = array[k].vente_moto === 1 ? "class=hidden": ""
+            var huiles = array[k].huiles === 1 ? "class=hidden": ""
+
+            ul.innerHTML =`
+                    <li `+garage+`> <img src="`+window.location.origin+`/img/car-shed.png" alt="Garage"> </li>
+                    <li `+personnalisation+`> <img src="`+window.location.origin+`/img/hammer-and-wrench.png" alt="Tunning"> </li>
+                    <li `+accessoires+`> <img src="`+window.location.origin+`/img/motorcyclist-helmet-side-view.png" alt="Vendeur Accessoires"> </li>
+                    <li `+pieces+`> <img src="`+window.location.origin+`/img/exhaust-pipe.png" alt="Vendeur Pieces"> </li>
+                    <li `+vente_moto+`> <img src="`+window.location.origin+`/img/motorcycle-of-big-size-black-silhouette.png" alt="Vendeur Moto"> </li>
+                    <li `+huiles+`> <img src="`+window.location.origin+`/img/oil.png" alt="Vendeur Huiles"> </li>
+                   `
+
+            icon.appendChild(h52)
+            icon.appendChild(ul)
+            li.appendChild(group)
+            li.appendChild(icon)
+
+            li.addEventListener('mouseover', function() {
+                var lat = this.getAttribute('data-lat')
+                var lng = this.getAttribute('data-lng')
+                var id = this.getAttribute('data-id')
+                app.map.carte.setCenter(new google.maps.LatLng(lat, lng))
+                app.map.popup['map'+id].setPosition(new google.maps.LatLng(lat,lng));
+                app.map.popup['map'+id].open(app.map.carte,app.map.marker['map'+id])
+            })
+
+            li.addEventListener('mouseout', function() {
+                var id = this.getAttribute('data-id')
+
+                app.map.popup['map'+id].close()
+            })
+
+            document.getElementById('group').appendChild(li)
+
+        }
+
     }
+
+
 
 }

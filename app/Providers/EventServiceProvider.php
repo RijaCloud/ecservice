@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Events\ImageToModify;
 use App\Events\ImageToUpload;
+use App\Events\LieuHasBeenDeleted;
 use App\Events\UserHasLoggedIn;
 use App\Listeners\ImageHasBeenModified;
 use App\Listeners\ImageHaveBeenUpload;
+use App\Listeners\LieuDeleted;
 use App\Listeners\LogginSuccess;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -19,9 +21,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
-        ],
         UserHasLoggedIn::class => [
             LogginSuccess::class,
         ],
@@ -30,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ImageToModify::class => [
             ImageHasBeenModified::class,
+        ],
+        LieuHasBeenDeleted::class => [
+            LieuDeleted::class,
         ]
         
     ];

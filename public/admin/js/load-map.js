@@ -46,7 +46,7 @@ var app  = {
         },
         initMap : function(element, param = null)  {
 
-            var pos = (param !== null) ? {lat:param.lat,lng:param.lng} : {lat: -18.9149, lng: 47.5316};
+            var pos = (param !== null) ? new google.maps.LatLng(param.lat,param.lng) : {lat: -18.9149, lng: 47.5316};
 
             var search = {};
 
@@ -73,6 +73,14 @@ var app  = {
                             draggable: true
                         })
 
+                        google.maps.event.addListener(app.map.marker,'dragend', function() {
+
+                            var latlng = this.getPosition();
+
+                            longitude.value = latlng.lng();
+                            latitude.value = latlng.lat();
+
+                        });
                         if(place.geometry.viewport)
                             bounds.union(place.geometry.viewport)
                         else

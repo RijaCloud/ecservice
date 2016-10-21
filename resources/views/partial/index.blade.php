@@ -22,11 +22,16 @@
                 <div style="position:relative;float:left;    width: 46%;">
                     <input type="text" placeholder="Je recherche" name="sv" id="mys" class="aria-search">
                 </div>
-                <div class="dropdown"></div>
 
                 <div style="position:relative;float:right;    width: 46%;">
                     <input type="text" placeholder="Fokontany" name="sf" id="mysf" class="aria-search">
                 </div>
+                <div class="dropdown">
+                    <ul class="hidden">
+
+                    </ul>
+                </div>
+
                 <button type="submit" class="btn btn-primary"></button>
             </div>
 

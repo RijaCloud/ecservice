@@ -12,6 +12,9 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     border-color: initial;
     font: inherit;
 }
+img {
+    width: 100%;
+}
 ::-webkit-input-placeholder
 {
     font-size: 15px;
@@ -237,6 +240,10 @@ ul.dropdown-menu > li > a:hover {
     /* bottom: 2px; */
     margin-top: 6px;
     top: 70px;
+    right: 38px;
+    /* left: 0; */
+    background: #fff;
+
 }
 #indexInput .dropdown .down {
     width: 100%;
@@ -419,25 +426,25 @@ ul.dropdown-menu > li > a:hover {
     padding-right: 0;
 }
 #body .col-md-4 {
-    padding-right: 20px;
 }
 #section-right {
     padding: 0;
+    position: fixed;
+    right: 0;
+    height: 100%;
 }
 #topRight .top-content {
     display: block;
     font-size: 16px;
 }
 #fixedRight {
-    overflow-y: auto;
+    /* overflow-y: auto; */
     /* transform: translateY(-90px); */
     /* -webkit-transform: translateY(90px); */
     transition: all .4s ease;
     margin-top: 10px;
     margin-right: auto;
-    overflow-x: hidden;
-    max-height: 700px;
-    box-shadow: 0px 1px 1px 5px rgba(64, 63, 63, 0.04), 0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33),0px 1px 1px 0px rgba(64, 63, 63, 0.33);
+    margin-right: 450px;
 }
 #fixedRight ul .shade-list {
     padding: 10px 15px;
@@ -450,11 +457,12 @@ ul.dropdown-menu > li > a:hover {
 }
 #fixedRight ul .shade-list .group-content h5 {
     margin-bottom: 4px;
-    float:left;
+    display: block;
     font-size: 17px;
+    color: #c71d1d;
 }
 #fixedRight ul .shade-list .group-content span {
-    float:left;
+    display:block;
 }
 #fixedRight ul .shade-list .group-content p {
     padding-left: 15px;
@@ -493,6 +501,7 @@ ul.dropdown-menu > li > a:hover {
     /* -webkit-transform: translateY(-90px); */
     transition: all .4s ease;
     margin: 26px;
+    margin-right: 465px;
     color: #fff;
 }
 #topRight .top-content {
@@ -514,6 +523,13 @@ ul.dropdown-menu > li > a:hover {
 }
 #group {
     padding-bottom: 30px;
+    height: auto;
+    position: relative;
+}
+#group .group-content h4{
+    font-size: 20px;
+    color: #2fb7a5;
+    border-bottom: 1px solid #ddd;
 }
 #todroplist {
     with: 100%;
@@ -534,7 +550,7 @@ ul.dropdown-menu > li > a:hover {
     padding: 10px;
 }
 .listicon {
-    padding-left: 13px;
+
 }
 .listicon ul {
     list-style:none;
@@ -567,7 +583,14 @@ ul.dropdown-menu > li > a:hover {
     cursor:pointer;
     width:100%;
     height:100%;
+    display: block;
 }
 #actif div {
     display: inline-block;
+}
+.link-more a {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
 }

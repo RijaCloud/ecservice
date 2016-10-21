@@ -13,8 +13,7 @@
             '</div>')
 
             var chosen = false;
-
-
+    
     $('#searchBar').on('focus', function () {
         var $drop = $('#todroplist');
         $drop.css('width','100%').css('top',58);
@@ -24,11 +23,11 @@
 
     $('#searchBar').on('blur', function(e) {
         e.stopPropagation()
-        if(chosen)
             $(this).parent().next('.dropdown').find('.down').remove()
     })
 
-    $('#todroplist .list').on('click','li.li-down',function() {
+    $('#todroplist .list').on('click','li.li-down',function(e) {
+        e.stopPropagation()
        $('#searchBar').val($(this).attr('data-value'));
        $('.down').remove();
            chosen = true;
@@ -51,8 +50,6 @@
             window.location.href = "/fokontany/"+mf.val()+"?sv="+ms.val()
 
         }
-
-
 
     })
 })();
