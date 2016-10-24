@@ -40,7 +40,6 @@ class LieuRepository {
      * @return mixed
      */
     public function countAll() {
-
         return $this->moto->select(DB::raw('COUNT(*) as all'))->get();
     }
 
@@ -49,9 +48,27 @@ class LieuRepository {
      * @param $limit
      * @return mixed
      */
-    public function getPlaceRadomly($limit) {
+    public function getPlaceRadomly($from,$limit = 10, $specification = []) {
 
-        return $this->model->random($limit)->get();
+        $specification = array_flip($specification);
+
+        return $this->model
+            ->join('moto','moto.lieu_id','=','lieu.id')
+            ->when(isset($specification['garage']), function($q) {
+                return $q->where('moto.garage',true);
+            })->when(isset($specification['accessoires']), function($q) {
+                return $q->where('moto.accessoires',true);
+            })->when(isset($specification['pieces']), function($q) {
+                return $q->where('moto.pieces',true);
+            })->when(isset($specification['personnalisation']), function($q) {
+                return $q->where('moto.personnalisation',true);
+            })->when(isset($specification['moto']), function($q) {
+                return $q->where('moto.vente_moto',true);
+            })->when($limit , function($query) use($from,$limit) {
+                return $query->offset($from)->limit($limit);
+            },function($query) {
+                return $query->take(10);
+            })->get();
         
     }
 
@@ -369,6 +386,10 @@ class LieuRepository {
 
             return $long_query
 
+                ->join('lieu',function($joins) {
+                    $joins
+                        ->on('moto.lieu_id','=','lieu.id');
+                })
                 ->when(isset($specified['garage']) , function($query){
                     return $query->garage();
                 })->when(isset($specified['pieces']) , function($query){
@@ -382,10 +403,6 @@ class LieuRepository {
                     return $query->moto();
                 })->when(isset($specified['huiles']) , function($query){
                     return $query->huiles();
-                })
-                ->join('lieu',function($joins) {
-                    $joins
-                        ->on('moto.lieu_id','=','lieu.id');
                 })
                 ->when($entity == "fokontany" , function($query) use ($param) {
 

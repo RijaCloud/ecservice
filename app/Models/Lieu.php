@@ -11,7 +11,7 @@ class Lieu extends Model
 
     protected $guarded = [];
 
-    protected $hidden = ['created_at','updated_at','fokontany_id'];
+    protected $hidden = ['created_at','updated_at','fokontany_id','commune_id','district_id','province_id'];
 
     public $timestamps = true;
 
@@ -22,43 +22,10 @@ class Lieu extends Model
      */
     public function fokontany() {
 
-        return $this->belongsTo(Fokontany::class,'id');
+        return $this->belongsTo(Fokontany::class,'fokontany_id');
 
-    }
-
-    /**
-     * The Many To Many Relation
-     * On peut trouver plusieur huile dans un lieux precis
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function huile() {
-        
-        return $this->belongsToMany(Huile::class,'lieu_huile','lieu_id');
-        
-    }
-
-    /**
-     * The Many to Many Relation
-     * Un lieu peut vendre plusieur pieces
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function pieces() {
-        
-        return $this->belongsToMany(Pieces::class,'lieu_pieces','lieu_id');
-        
     }
     
-    /**
-     * The One to Many Relation
-     * Un lieu peu vendre plusieurs accessoires moto
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function accessoires() {
-        
-        return $this->belongsToMany(Accessoires::class, 'lieu_accessoires','lieu_id');
-        
-    }
-
     public function image() {
         
         return $this->hasOne(Image::class);

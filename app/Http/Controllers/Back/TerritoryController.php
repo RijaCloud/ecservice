@@ -161,7 +161,16 @@ class TerritoryController extends Controller
         $this->repository->updateCommune($id,$request->except('_token'));
 
     }
-    
+
+    public function deleteTown($id) {
+
+        $d = $this->repository->deleteCommune($id);
+
+        if($d)
+            return back()->withInput(['success'=>'Lieu bien supprimer']);
+
+    }
+
     /**
      * Return the province view
      * If the current Request is XMLHttpRequest , it return a partial view

@@ -13,8 +13,8 @@
 <div class="community col-lg-12" >
     @include('absolute.nav')
     <div class="middle-index">
-        <h1>EveryCycle</h1>
-        <h3><span class="typed" style="white-space:pre;">Trouver les lieux specialiser dans la maintenance de votre moto , <br> quelque soit votre position à Antananarivo</span></h3>
+        <h1>WheelsMada</h1>
+        <h3><span class="typed" style="white-space:pre;">Trouver les lieux specialiser dans la maintenance, l'entretient, la personnalisation de votre moto , <br> quelque soit votre position à Antananarivo</span></h3>
     </div>
     <div class="middle-research">
         <form id="indexInput" action="{{ url('fokontany') }}" method="GET" autocomplete="off">
@@ -23,10 +23,13 @@
                     <input type="text" placeholder="Je recherche" name="sv" id="mys" class="aria-search">
                 </div>
 
+                <div class="dropdown left">
+                </div>
+
                 <div style="position:relative;float:right;    width: 46%;">
                     <input type="text" placeholder="Fokontany" name="sf" id="mysf" class="aria-search">
                 </div>
-                <div class="dropdown">
+                <div class="dropdown right">
                     <ul class="hidden">
 
                     </ul>

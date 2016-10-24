@@ -18,12 +18,13 @@
             <?php endif; ?>
             ">
                 <div class="group-content">
-                    <h4 ><strong>{{ (isset($p->string_lieu)) ? $p->string_lieu : $p->lieu['string_lieu'] }}</strong> </h4>
-                     <?php if($p->address || $p->lieu['address']): ?> <span  class="content-address"><h5>Adresse:</h5>   <strong>{{ (isset($p->address)) ? "".$p->address.""   : "".$p->lieu['address']."" }}</strong> </span> <?php endif; ?>
-                     <?php if($p->telephone || $p->lieu['telephone'] || !is_null($p->telephone) || !is_null($p->lieu['telephone']) ): ?>   <span  class="content-telephone"><h5>Contact:</h5>  <strong>{{ (isset($p->telephone)) ? "".$p->telephone.""   : "".$p->lieu['telephone']."" }}</strong> </span> <?php endif; ?>
-                    <div class="clearfix"></div>
+                    <h4 ><strong>{{ (isset($p->string_lieu)) ? $p->string_lieu : $p->lieu['string_lieu'] }}</strong>  </h4>
+
                     <div itemscope class="content-details row">
                     <div class="col-md-8">
+                        <?php if($p->address || $p->lieu['address']): ?> <span  class="content-address"><h5>Adresse:</h5>   <strong>{{ (isset($p->address)) ? "".$p->address.""   : "".$p->lieu['address']."" }}</strong> </span> <?php endif; ?>
+                        <?php if($p->telephone || $p->lieu['telephone'] || !is_null($p->telephone) || !is_null($p->lieu['telephone']) ): ?>   <span  class="content-telephone"><h5>Contact:</h5>  <strong>{{ (isset($p->telephone)) ? "".$p->telephone.""   : "".$p->lieu['telephone']."" }}</strong> </span> <?php endif; ?>
+                        <div class="clearfix"></div>
                         <h5>Description:</h5>
                         <p class="">
                             {{ (isset($p->description)) ? $p->description : $p->lieu['description'] }}
@@ -50,6 +51,7 @@
                         <?php endif; ?>
                     </div>
                     </div>
+                    <span class="">{{ (isset($p->fokontany->nom)) ? $p->fokontany->nom : $p->lieu['fokontany']['nom'] }}</span>
                 </div>
             </li>
             <?php $counter++ ?>

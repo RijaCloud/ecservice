@@ -332,10 +332,12 @@ var app  = {
         goLocalize.title = "Me localisé"
         goLocalize.index = 1
         goLocalize.style.cursor = "pointer"
+        goLocalize.style.backgroundColor = "#fff"
 
         var img = document.createElement('img')
         img.src = window.location.origin+"/img/user-location.png"
         img.title = "Me localisé"
+
 
         goLocalize.appendChild(img)
 
@@ -373,16 +375,19 @@ var app  = {
 
     },
     stuffFunction: function (latitude,longitude,id,marker_name,img,tel,address,latLng) {
-        app.map.marker_name['map'+id] = '<div id="content">'+
-            '<span class="pan" style="color:black!important;"> Lieu:'+
-            '<strong> '+
-            marker_name
-            +'</strong>'
-            + '</span>'+
-            address
-            + tel +
-            '<img style="margin:0 auto;display:inline-block;vertical-align:center;text-align:center;" src="'+img+'" alt="'+marker_name+'">'+
-            '</div>';
+
+        var template = `
+            <div id="iw-container">
+                <div class="iw-title">
+                    <span class="pan"> <strong> Nom:</strong> `+marker_name+` </span>
+                </div>
+                <div class="iw-image">
+                    <img src="`+img+`" alt="`+marker_name+`">
+                </div>
+            </div> 
+        `
+
+        app.map.marker_name['map'+id] = template;
 
         var image = {
             url: window.location.origin+'/img/map-marker.png',
@@ -424,6 +429,7 @@ var app  = {
 
         })
 
+
     },
     getMoreResult: function(element) {
 
@@ -443,15 +449,17 @@ var app  = {
                     if(http.readyState == 4 && http.status == 200) {
                         document.getElementById('load').classList.add('hidden')
                         more_result = JSON.parse(http.responseText)
-                        app.appendMoreResult(more_result.list)
+                        app.appendMoreResult(more_result.list ? more_result.list : more_result)
                         var base =  href.substr(1).split('&')
                         var more = base[2].replace(/\w+=/gi,'')
                         var m = more_result.n + parseInt(more)
                         var ref = href.replace(/more=\d+/gi,'more='+ m)
                         that.setAttribute('data-href',ref)
-                        if ( more_result.list.length < 10 ) {
+
+                        if ( more_result.list.length < 10 || more_result.length < 10 ) {
                             that.parentNode.innerHTML = "Plus aucun résultat"
                         }
+
                     } else if ( http.status > 400 ) {
                         document.getElementById('error').classList.remove('hidden')
                     } else {
@@ -468,6 +476,9 @@ var app  = {
     appendMoreResult: function(result) {
 
         var array = result
+
+        if(typeof array == "undefined")
+            return false
 
         for(var k = 0 ; k < array.length ; k++ ) {
 
@@ -511,24 +522,6 @@ var app  = {
             h.appendChild(strong)
             group.appendChild(h)
 
-            if(array[k].address) {
-                var span = document.createElement('span')
-                span.classList.add('content-address')
-                var h5 = document.createElement('h5')
-                h5.innerText = "Telephone"
-                span.appendChild(h5)
-                group.append(span)
-            }
-
-            if(array[k].telephone) {
-                var span = document.createElement('span')
-                span.classList.add('content-address')
-                var h5 = document.createElement('h5')
-                h5.innerText = "Telephone"
-                span.appendChild(h5)
-                group.append(span)
-            }
-
             var div_fix = document.createElement('div')
             div_fix.classList.add('clearfix')
 
@@ -538,24 +531,40 @@ var app  = {
 
             var m8 = document.createElement('div')
             m8.classList.add('col-md-8')
-            m8.innerHTML = `<h5>Description:</h5>`+ array[k].description
 
-            div.appendChild(m8)
+            var hD =   document.createElement('h5')
+            hD.innerText = "Description"
 
-            var div_responsive = document.createElement('div')
-            div_responsive.classList.add('img-responsive')
-            div_responsive.classList.add('col-md-4')
+            var p = document.createElement('p')
+            p.innerText = array[k].description
 
-            var img = document.createElement('img')
-            img.setAttribute('src',window.location.origin + img_medium)
-            img.setAttribute('alt', array[k].string_lieu )
+            if(array[k].address) {
+                var span = document.createElement('span')
+                span.classList.add('content-address')
+                var h5 = document.createElement('h5')
+                h5.innerText = "Adresse: "
+                var strong = document.createElement('strong')
+                strong.innerText = array[k].address
 
-            div_responsive.appendChild(img)
+                span.appendChild(h5)
+                span.appendChild(strong)
+                m8.appendChild(span)
+            }
 
-            group.appendChild(div_fix)
+            if(array[k].telephone) {
+                var span = document.createElement('span')
+                span.classList.add('content-address')
+                var h5 = document.createElement('h5')
+                h5.innerText = "Telephone: "
 
-            div.appendChild(div_responsive)
-            group.appendChild(div)
+                var strong = document.createElement('strong')
+                strong.innerText = array[k].telephone
+
+                span.appendChild(h5)
+                span.appendChild(strong)
+                m8.appendChild(span)
+            }
+
 
             var icon = document.createElement('div')
             icon.classList.add('listicon')
@@ -580,10 +589,32 @@ var app  = {
                     <li `+huiles+`> <img src="`+window.location.origin+`/img/oil.png" alt="Vendeur Huiles"> </li>
                    `
 
+
+            m8.appendChild(hD)
+            m8.appendChild(p)
             icon.appendChild(h52)
             icon.appendChild(ul)
+
+            m8.appendChild(icon)
+            div.appendChild(m8)
+
+            var div_responsive = document.createElement('div')
+            div_responsive.classList.add('img-responsive')
+            div_responsive.classList.add('col-md-4')
+
+            var img = document.createElement('img')
+            img.setAttribute('src',window.location.origin + img_medium)
+            img.setAttribute('alt', array[k].string_lieu )
+
+            div_responsive.appendChild(img)
+
+            group.appendChild(div_fix)
+
+            div.appendChild(div_responsive)
+            group.appendChild(div)
+
             li.appendChild(group)
-            li.appendChild(icon)
+
 
             li.addEventListener('mouseover', function() {
                 var lat = this.getAttribute('data-lat')
@@ -605,7 +636,5 @@ var app  = {
         }
 
     }
-
-
 
 }

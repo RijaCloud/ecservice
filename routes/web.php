@@ -63,6 +63,7 @@ Route::group(['middleware'=>'auth','prefix'=>'gstion/admin'], function() {
         Route::get('/town/{id}' , 'Back\TerritoryController@readTown')->name('territory.readTown')->where('id','([0-9 ]+)-([ a-zA-Z-]+)');
         Route::get('/town/all' , 'Back\TerritoryController@allTown')->name('territory.allTown');
         Route::post('/town/{id}/update','Back\TerritoryController@updateTown')->name('territory.updateTown')->where('id','([0-9]+)');
+        Route::post('/town/{id}/delete','Back\TerritoryController@deleteTown')->name('territory.deleteTown')->where('id','([0-9]+)');
         
         Route::get('/state','Back\TerritoryController@state')->name('territory.state');
         

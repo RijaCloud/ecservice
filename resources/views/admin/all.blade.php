@@ -17,10 +17,11 @@
                         <thead>
                         <tr>
                             @if(Route::current()->getName() == 'territory.allPlace')
-                            <td>No.</td>
-                            <td>Name</td>
-                            <td>Description</td>
-                                @else
+                                <td>No.</td>
+                                <td>Name</td>
+                                <td>Description</td>
+                                <td>Fokontany</td>
+                            @else
                                 <td>No.</td>
                                 <td>Name</td>
                                 <td>Description</td>
@@ -42,6 +43,7 @@
                                     <td>{{ $last->id }}</td>
                                     <td>{{ $last->string_lieu }}</td>
                                     <td>{{ $last->description }}</td>
+                                    <td>{{ $last->fokontany->nom }}</td>
                                             @else
                                         <td>{{ $last->id }}</td>
                                         <td>{{ $last->nom }}</td>

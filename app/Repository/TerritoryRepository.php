@@ -160,6 +160,18 @@
         }
 
         /**
+         * Update a commune
+         * @param $id
+         * @param $input
+         */
+        public function deleteCommune($id , $input) {
+
+            $commune = $this->oneCommune($id);
+
+             return  $commune->delete();
+
+        }
+        /**
          * Return all region
          * @param null $limit
          * @return mixed

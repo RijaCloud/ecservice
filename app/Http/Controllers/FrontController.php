@@ -40,16 +40,16 @@ class FrontController extends Controller
         
         if(!is_null($name)) {
 
-            
             $search = $this->repository->oneFokontany($name);
 
         } else {
 
-            $search = $this->repository->oneFokontany("ANTANIMALALAKA ANALAKELY");
+            $search = null;
 
         }
 
-        return $this->loadResult($search,$request,'fokontany',1.2);
+        return $this->loadResult($search,$request,'fokontany',100);
+
     }
 
 
@@ -70,7 +70,8 @@ class FrontController extends Controller
 
         }
 
-        return $this->loadResult($search,$request,'commune',2);
+        return $this->loadResult($search,$request,'commune',100);
+
     }
 
     /**
@@ -90,7 +91,8 @@ class FrontController extends Controller
 
         }
 
-        return $this->loadResult($search,$request,'region',3);
+        return $this->loadResult($search,$request,'region',100);
+
     }
 
 
@@ -109,7 +111,7 @@ class FrontController extends Controller
 
         }
 
-        return $this->loadResult($search,$request,'district',4);
+        return $this->loadResult($search,$request,'district',100);
 
     }
 
@@ -120,6 +122,7 @@ class FrontController extends Controller
             $match = $request->get('s');
             $sp = $request->get('sp');
             $instance = null;
+
             switch($sp) {
 
                 case 'region':
@@ -188,13 +191,6 @@ class FrontController extends Controller
 
         $thatPlace = [];
 
-        if(!$search) {
-            $thatPlace = ['place'=>$thatPlace];
-
-            return view('partial.services',compact('thatPlace'));
-
-        }
-
         $specified_query = [];
 
         if($request->has('sv')) {
@@ -218,6 +214,30 @@ class FrontController extends Controller
 
         }
 
+        if(!$search) {
+
+            if($request->isXmlHttpRequest()) {
+
+                if($request->has('more')) {
+
+                    $from = (int) $request->get('more') + 1;
+
+                    $list = $this->lieux->getPlaceRadomly($from,10,$specified_query);
+
+                    return response()->json(['list'=>$list,'n'=>$list->count()]);
+
+                }
+
+            }
+
+            $thatPlace = $this->lieux->getPlaceRadomly(0,10,$specified_query);
+
+            $thatPlace = ['place'=>$thatPlace];
+
+            return view('partial.services',compact('thatPlace'));
+
+        }
+
 
         if($request->isXmlHttpRequest()) {
 
@@ -225,10 +245,7 @@ class FrontController extends Controller
 
                 $from = $request->get('more');
                 $limit = 10;
-                do {
-                    $list = $this->lieux->allWhereByLimit($search,$specified_query,$d,$locality,$from,$limit);
-                    $d += .2;
-                } while( $list->isEmpty() );
+                $list = $this->lieux->allWhereByLimit($search,$specified_query,$d,$locality,$from,$limit);
                 $n = $list->count();
                 return response()->json(['list'=>$list,'d'=>$d,'n'=>$n]);
 
@@ -236,7 +253,7 @@ class FrontController extends Controller
 
         }
 
-        $thatPlace = $this->lieux->allWhere($search,$specified_query,150,$locality);
+        $thatPlace = $this->lieux->allWhere($search,$specified_query,$d,$locality);
 
         $thatPlace = array_merge_recursive(['place'=>$thatPlace] , ['center'=>[
             'lat' => $search->latitude,
